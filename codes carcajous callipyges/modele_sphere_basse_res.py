@@ -11,8 +11,7 @@
 # pas visibles à travers la sphère
 # 
 # ==============================================================================
-import xarray as xr
-print("xarray version:", xr.__version__)
+
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider
