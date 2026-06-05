@@ -1,2 +1,3 @@
 # Les-GBF-malicieux
-Et voilà...
+Dépot GitHub du projet CREPES 2026
+README à développer
