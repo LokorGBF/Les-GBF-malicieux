@@ -58,34 +58,15 @@ except (FileNotFoundError, RuntimeError) as e:
     sys.exit(1)
 
 # Définition de la grille HAUTE RÉSOLUTION
-NLAT_HI, NLON_HI = 35 , 70
+NLAT_HI, NLON_HI = 30 , 70
 LAT_HI = np.linspace(LAT.min(), LAT.max(), NLAT_HI)
 LON_HI = np.linspace(LON.min(), LON.max(), NLON_HI)
 print(f"Grille haute résolution définie : {NLAT_HI}x{NLON_HI} points.")
 
-# # --- Pré-calcul et interpolation des grilles de paramètres ---
-# print("Pré-calcul des paramètres sur la grille haute résolution...")
-
-# def upscale_grid(data_lowres, lat_low, lon_low, lat_hi, lon_hi):
-#     """Interpole une grille 2D de basse à haute résolution."""
-#     interp = RegularGridInterpolator(
-#         (lat_low, lon_low), data_lowres, bounds_error=False, fill_value=None
-#     )
-#     points_hi = np.array(np.meshgrid(lat_hi, lon_hi, indexing="ij"))
-#     return interp(np.moveaxis(points_hi, 0, -1))
-
-# monthly_albedo_hi = np.array([
-#    upscale_grid(monthly_albedo_lowres[m], LAT_lowres, LON_lowres, LAT_HI, LON_HI)
-#    for m in range(12)
-#])
-# RZSM_GRID_hi = upscale_grid(
-#     RZSM_GRID_lowres, RZSM_LAT_lowres[:-1], RZSM_LON_lowres[:-1], LAT_HI, LON_HI
-# )
 Q_GRID_HI = np.array([[lib.P_em_surf_evap(lat, lon, verbose=False) for lon in LON_HI] for lat in LAT_HI])
 C_GRID_HI = (f.compute_cp_from_rzsm(RZSM_GRID) * 1000.0) * f.RHO_BULK * lib.EPAISSEUR_ACTIVE
 
 # Utilisation de la fonction corrigée lisser_donnees_annuelles
-#albedo_sol_daily_grid = f.lisser_donnees_annuelles(monthly_albedo_sol[:, i, j], sigma=15.0)
 albedo_sol_daily_grid = np.array([
     [
         f.lisser_donnees_annuelles(monthly_albedo_sol[:, i, j], sigma=15.0)
