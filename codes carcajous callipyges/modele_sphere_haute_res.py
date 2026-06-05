@@ -59,7 +59,7 @@ except (FileNotFoundError, RuntimeError) as e:
     sys.exit(1)
 
 # Définition de la grille HAUTE RÉSOLUTION
-NLAT_HI, NLON_HI = 70, 140
+NLAT_HI, NLON_HI = 35 , 70
 LAT_HI = np.linspace(LAT_lowres.min(), LAT_lowres.max(), NLAT_HI)
 LON_HI = np.linspace(LON_lowres.min(), LON_lowres.max(), NLON_HI)
 print(f"Grille haute résolution définie : {NLAT_HI}x{NLON_HI} points.")
