@@ -1,4 +1,4 @@
-# 🐾 ***Les-GBF-malicieux***
+# ⚡ ***Les-GBF-malicieux***
 ## **projet CREPES 2026, réalisation d'un modéle de prévision climatique mondiale**
 
 ### Présentation du projet
@@ -46,6 +46,8 @@ Notre travail s'est divisé en plusieurs phases clés :
    * `[matplotlib]`
    * `[scipy.interpolate]`
    * `[tqdm]`
+  Si l'installation des bibliothéques rencontre des problème, crée un environnement virtuelle pour lancer le programme:
+   *** [expliquer comment on en crée un ?]***
 
 
 
