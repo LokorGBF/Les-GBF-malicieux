@@ -1,0 +1,13 @@
+*.csv
+Projet CREP 2026/results/simulations/T_history.npy
+Projet CREP 2026/ressources/albedo/CERES_EBAF-TOA_Ed4.2.1_Subset_202401-202501.nc
+Projet CREP 2026/ressources/albedo/readme.txt
+Projet CREP 2026/ressources/Cp_humidity/ZZ_cp.py
+Projet CREP 2026/ressources/map/coastlines/ne_10m_coastline.dbf
+Projet CREP 2026/ressources/map/coastlines/ne_10m_coastline.shp
+Projet CREP 2026/ressources/map/coastlines/ne_10m_coastline.shx
+Projet CREP 2026/ressources/map/ne_110m_admin_0_countries.cpg
+Projet CREP 2026/ressources/map/ne_110m_admin_0_countries.dbf
+Projet CREP 2026/ressources/map/ne_110m_admin_0_countries.prj
+Projet CREP 2026/ressources/map/ne_110m_admin_0_countries.shp
+Projet CREP 2026/ressources/map/ne_110m_admin_0_countries.shx

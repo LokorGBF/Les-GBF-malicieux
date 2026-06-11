@@ -46,12 +46,13 @@ Notre travail s'est divisé en plusieurs phases clés :
    * `[matplotlib]`
    * `[scipy.interpolate]`
    * `[tqdm]`
-  Si l'installation des bibliothéques rencontre des problème, crée un environnement virtuelle pour lancer le programme:
-   *** [expliquer comment on en crée un ?]***
+
+ 2. **Utiliser un environnement virtuel (Recommandé)**
+
+Si l'installation des bibliothèques rencontre des problèmes (comme des conflits de versions avec d'autres projets sur votre machine), il est fortement conseillé de créer un **environnement virtuel**. Cela permet d'isoler le projet.
 
 
-
-2. **Lancer le fichier principale :**
+3. **Lancer le fichier principale :**
    ```bash
    python [Nom_du_script_principal_si_y'en_a_un_jsp_peut_etre_pas_on_verra.py]
    ```
