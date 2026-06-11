@@ -51,6 +51,6 @@ Notre travail s'est divisé en plusieurs phases clés :
 
 2. **Lancer le fichier principale :**
    ```bash
-   python [Nom_du_script_principal.py]
+   python [Nom_du_script_principal_si_y'en_a_un_jsp_peut_etre_pas_on_verra.py]
    ```
 
