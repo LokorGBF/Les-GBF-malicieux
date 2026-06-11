@@ -1,0 +1,68 @@
+\documentclass[12pt]{article}
+
+% --- Packages nécessaires ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{graphicx} % Pour le logo
+\usepackage{geometry} % Pour les marges
+\geometry{hmargin=2.5cm,vmargin=2.5cm}
+
+\begin{document}
+
+% --- Début de la page de garde ---
+\begin{titlepage}
+    \centering % Tout centrer par défaut
+    
+    % 1. Logo
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.8\linewidth]{logo centrale 2026-06-11 170317.png}
+        \label{fig:placeholder}
+    \end{figure}
+    
+    % 2. École et infos
+    {\scshape\Large CapECL} \\[1.5cm]
+    
+    {\large Les GBF malicieux \\ Juin 2026 \\ RAPPORT} \\[2cm]
+    
+    % 3. Titre principal (en gras et très gros)
+    \rule{\linewidth}{0.5mm} \\[0.4cm]
+    {\Huge \bfseries Synthèse} \\[0.4cm]
+    \rule{\linewidth}{0.5mm} \\[2cm]
+    
+    % 4. Bas de page : Etudiants et Enseignants
+    \begin{minipage}{0.5\textwidth}
+        \begin{flushleft} \large
+            \emph{Contributeurs :}\\
+            Djannah \textsc{CHANFOUR} \\
+            Khalil \textsc{ROUIBAH} \\
+            Léa \textsc{CHARRIER} \\
+            Cyprien \textsc{LAVIER} \\
+            Marko \textsc{SELIC} \\
+            Naïm \textsc{BEN NEJMA} \\
+        \end{flushleft}
+    \end{minipage}
+    ~
+    \begin{minipage}{0.4\textwidth}
+        \begin{flushright} \large
+            \emph{Enseignants :} \\
+            G. \textsc{Chevereau} \\
+            B. \textsc{Bernard} 
+            
+        \end{flushright}
+    \end{minipage}
+
+    \vfill % Pousse le reste vers le bas
+
+\end{titlepage}
+% --- Fin de la page de garde ---
+
+\newpage
+\tableofcontents % Sommaire automatique
+\newpage
+
+\section{Introduction}
+Votre texte commence ici...
+
+\end{document}
