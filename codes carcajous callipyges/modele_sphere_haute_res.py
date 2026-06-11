@@ -17,7 +17,7 @@ from matplotlib.colors import Normalize
 from matplotlib import cm
 from scipy.interpolate import RegularGridInterpolator
 from tqdm import tqdm
-import pathlib
+import pathl
 import os
 import sys
 
