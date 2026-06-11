@@ -15,9 +15,8 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider
 from matplotlib.colors import Normalize
 from matplotlib import cm
-from scipy.interpolate import RegularGridInterpolator
 from tqdm import tqdm
-import pathl
+import pathlib
 import os
 import sys
 
@@ -36,8 +35,8 @@ except ImportError:
 
 # --- Chemins des fichiers de résultats HAUTE RÉSOLUTION ---
 NPY_DIR = pathlib.Path("ressources/npy")
-HIRES_STABILIZED_FILE = NPY_DIR / "grid_hires_stabilized.npy"
-HIRES_ONEYEAR_FILE = NPY_DIR / "grid_hires_1yr.npy"
+STABILIZED_FILE = NPY_DIR / "grid_stabilized.npy"
+ONEYEAR_FILE = NPY_DIR / "grid_1yr.npy"
 
 
 # ────────────────────────────────────────────────
@@ -47,11 +46,11 @@ print("\n--- Étape 1: Chargement et Suréchantillonnage des Données ---")
 try:
     # Chargement des données sources en basse résolution
     ALBEDO_DIR = pathlib.Path("ressources/albedo")
-    monthly_albedo_lowres, LAT_lowres, LON_lowres = f.load_albedo_series(ALBEDO_DIR)
-    RZSM_GRID_lowres, RZSM_LAT_lowres, RZSM_LON_lowres = f.load_and_grid_rzsm_data(
+    monthly_albedo_sol, LAT, LON = f.load_albedo_series(ALBEDO_DIR)
+    RZSM_GRID, lat_bins_rszm, lon_bins_rzsm = f.load_and_grid_rzsm_data(
         pathlib.Path("ressources/Cp_humidity/average_rzsm_tout.csv")
     )
-    ceres_clim_lowres = f.load_monthly_cloud_albedo_from_ceres(
+    CERES_CLIM_DATA = f.load_monthly_cloud_albedo_from_ceres(
         lat_deg=None, lon_deg=None, return_full_map=True
     )
 except (FileNotFoundError, RuntimeError) as e:
@@ -59,38 +58,27 @@ except (FileNotFoundError, RuntimeError) as e:
     sys.exit(1)
 
 # Définition de la grille HAUTE RÉSOLUTION
-NLAT_HI, NLON_HI = 35 , 70
-LAT_HI = np.linspace(LAT_lowres.min(), LAT_lowres.max(), NLAT_HI)
-LON_HI = np.linspace(LON_lowres.min(), LON_lowres.max(), NLON_HI)
+NLAT_HI, NLON_HI = 30 , 70
+LAT_HI = np.linspace(LAT.min(), LAT.max(), NLAT_HI)
+LON_HI = np.linspace(LON.min(), LON.max(), NLON_HI)
 print(f"Grille haute résolution définie : {NLAT_HI}x{NLON_HI} points.")
 
-# --- Pré-calcul et interpolation des grilles de paramètres ---
-print("Pré-calcul des paramètres sur la grille haute résolution...")
-
-def upscale_grid(data_lowres, lat_low, lon_low, lat_hi, lon_hi):
-    """Interpole une grille 2D de basse à haute résolution."""
-    interp = RegularGridInterpolator(
-        (lat_low, lon_low), data_lowres, bounds_error=False, fill_value=None
-    )
-    points_hi = np.array(np.meshgrid(lat_hi, lon_hi, indexing="ij"))
-    return interp(np.moveaxis(points_hi, 0, -1))
-
-monthly_albedo_hi = np.array([
-    upscale_grid(monthly_albedo_lowres[m], LAT_lowres, LON_lowres, LAT_HI, LON_HI)
-    for m in range(12)
-])
-RZSM_GRID_hi = upscale_grid(
-    RZSM_GRID_lowres, RZSM_LAT_lowres[:-1], RZSM_LON_lowres[:-1], LAT_HI, LON_HI
-)
 Q_GRID_HI = np.array([[lib.P_em_surf_evap(lat, lon, verbose=False) for lon in LON_HI] for lat in LAT_HI])
-C_GRID_HI = (f.compute_cp_from_rzsm(RZSM_GRID_hi) * 1000.0) * f.RHO_BULK * lib.EPAISSEUR_ACTIVE
+C_GRID_HI = (f.compute_cp_from_rzsm(RZSM_GRID) * 1000.0) * f.RHO_BULK * lib.EPAISSEUR_ACTIVE
 
 # Utilisation de la fonction corrigée lisser_donnees_annuelles
-albedo_sol_daily_grid = f.lisser_donnees_annuelles(monthly_albedo_hi, sigma=15.0)
-monthly_cloud_albedo_hi = ceres_clim_lowres.sel(
-    lat=LAT_HI, lon=LON_HI, method="nearest"
-).to_numpy()
-albedo_nuages_daily_grid = f.lisser_donnees_annuelles(monthly_cloud_albedo_hi, sigma=15.0)
+albedo_sol_daily_grid = np.array([
+    [
+        f.lisser_donnees_annuelles(monthly_albedo_sol[:, i, j], sigma=15.0)
+        for j in range(monthly_albedo_sol.shape[2])
+    ]
+    for i in range(monthly_albedo_sol.shape[1])
+])
+
+albedo_sol_daily_grid = np.transpose(albedo_sol_daily_grid, (2, 0, 1))
+
+monthly_cloud_albedo_hi = CERES_CLIM_DATA.sel(lat=LAT_HI, lon=LON_HI, method="nearest").to_numpy()
+albedo_nuages_daily_grid = f.lisser_donnees_annuelles(CERES_CLIM_DATA.sel(lat=LAT, lon=LON, method="nearest").to_numpy(), sigma=15.0)
 
 print("--- Pré-calcul terminé ---")
 
@@ -139,7 +127,7 @@ def integrate_point_temperature(
     return T
 
 def run_full_hires_simulation(days, stabilize=False):
-    result_file = HIRES_STABILIZED_FILE if stabilize else HIRES_ONEYEAR_FILE
+    result_file = STABILIZED_FILE if stabilize else ONEYEAR_FILE
     NPY_DIR.mkdir(parents=True, exist_ok=True)
     sim_type = "stabilisée (2 ans)" if stabilize else "rapide (1 an)"
     print(f"\nLancement de la simulation HAUTE RÉSOLUTION {sim_type}...")
@@ -181,15 +169,15 @@ if __name__ == "__main__":
     sim_days = 0
     stabilize = False
 
-    if HIRES_STABILIZED_FILE.exists():
-        print(f"Un fichier de simulation HI-RES stabilisée a été trouvé ('{HIRES_STABILIZED_FILE.name}').")
+    if STABILIZED_FILE.exists():
+        print(f"Un fichier de simulation HI-RES stabilisée a été trouvé ('{STABILIZED_FILE.name}').")
         choice = input("Voulez-vous le charger (c) ou relancer une simulation (r) ? [c/r]: ").lower()
-        if choice == 'c': target_file = HIRES_STABILIZED_FILE
+        if choice == 'c': target_file = STABILIZED_FILE
         else: run_sim = True
-    elif HIRES_ONEYEAR_FILE.exists():
-        print(f"Un fichier de simulation HI-RES sur 1 an a été trouvé ('{HIRES_ONEYEAR_FILE.name}').")
+    elif ONEYEAR_FILE.exists():
+        print(f"Un fichier de simulation HI-RES sur 1 an a été trouvé ('{ONEYEAR_FILE.name}').")
         choice = input("Charger ce fichier (c), ou lancer une nouvelle simulation stabilisée (r) ? [c/r]: ").lower()
-        if choice == 'c': target_file = HIRES_ONEYEAR_FILE
+        if choice == 'c': target_file = ONEYEAR_FILE
         else: run_sim = True
     else:
         print("Aucun fichier de simulation HI-RES pré-calculé n'a été trouvé.")
@@ -280,3 +268,4 @@ if __name__ == "__main__":
     _refresh(0)
     print("\nFenêtre de visualisation 3D HAUTE RÉSOLUTION ouverte.")
     plt.show()
+    
