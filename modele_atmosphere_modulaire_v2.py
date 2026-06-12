@@ -25,14 +25,19 @@ Auteur : version beta pédagogique.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from turtle import pd
 from typing import Callable, Dict, Iterable, List, Optional, Tuple, Any
 import csv
 import json
 import math
 import urllib.request
+import simulationCO21
 
 import numpy as np
 
+from pathlib import Path
+
+astm_file = Path("e490_00a_amo.xls")
 
 # ============================================================
 # Constantes physiques
@@ -157,6 +162,54 @@ class Spectrum:
             wavelengths_um=self.wavelengths_um.copy(),
             flux_w_m2_um=self.flux_w_m2_um.copy(),
             name=self.name if name is None else name,
+        )
+        
+    @classmethod
+    def from_dataframe_nm(
+        cls,
+        df: pd.DataFrame,
+        lambda_col: str = "lambda_nm",
+        flux_col: str = "E_nm",
+        name: str = "Spectre solaire ASTM E-490 AM0"
+    ) -> "Spectrum":
+        """
+        Crée un Spectrum à partir d'un DataFrame contenant :
+        - lambda_nm : longueur d'onde en nm
+        - E_nm : irradiance spectrale en W/m²/nm
+
+        Le modèle interne travaille en :
+        - lambda_um : µm
+        - flux_w_m2_um : W/m²/µm
+        """
+
+        if lambda_col not in df.columns:
+            raise ValueError(f"Colonne manquante : {lambda_col}")
+
+        if flux_col not in df.columns:
+            raise ValueError(f"Colonne manquante : {flux_col}")
+
+        lambda_nm = df[lambda_col].to_numpy(dtype=float)
+        E_nm = df[flux_col].to_numpy(dtype=float)
+
+        # Nettoyage des valeurs invalides
+        mask = np.isfinite(lambda_nm) & np.isfinite(E_nm) & (lambda_nm > 0) & (E_nm >= 0)
+
+        lambda_nm = lambda_nm[mask]
+        E_nm = E_nm[mask]
+
+        # Conversion nm -> µm
+        wavelengths_um = lambda_nm / 1000.0
+
+        # Conversion W/m²/nm -> W/m²/µm
+        flux_w_m2_um = E_nm * 1000.0
+
+        # Sécurité : tri par longueur d'onde croissante
+        order = np.argsort(wavelengths_um)
+
+        return cls(
+            wavelengths_um=wavelengths_um[order],
+            flux_w_m2_um=flux_w_m2_um[order],
+            name=name
         )
 
     def integrate(self) -> float:
@@ -1267,6 +1320,8 @@ def example_cell_emission() -> None:
 def example_basic() -> None:
     """Exemple autonome avec données beta."""
 
+    df_astm = simulationCO21.read_astm_e490_data(get_astm_e490_file(), printed=True, graph=True)
+    
     # Grille spectrale : du proche UV à l'infrarouge thermique.
     wavelengths = np.linspace(0.2, 50.0, 2500)
 
