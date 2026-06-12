@@ -14,7 +14,7 @@ def prepare_cloud_albedo(grid: dict, use_cloud_albedo: bool = True):
     n_theta, n_phi = grid["lat_grid"].shape
 
     if not use_cloud_albedo:
-        print("Albédo des nuages constant = 0.0 utilisé")
+        print("Albédo des nuages désactivé.")
         return np.full((365, n_theta, n_phi), CONSTANT_CLOUD_ALBEDO)
 
     ceres_path = (

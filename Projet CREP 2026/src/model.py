@@ -3,68 +3,53 @@ from tqdm import tqdm
 
 from src.energy_balance import compute_energy_balance
 
+# Temporalité du modèle = boucle temporelle
 
 def initial_temperature(grid: dict, base_temperature: float):
     """
     Température initiale uniforme sur toute la planète.
+    base_temperature est en kelvins.
     """
+
     n_theta, n_phi = grid["lat_grid"].shape
-    return np.full((n_theta, n_phi), base_temperature, dtype=np.float64)
+    return np.full((n_theta, n_phi), base_temperature)
 
 
-def run_model(
-    grid,
-    params,
-    options,
-    days: int,
-    dt: float,
-    base_temperature: float,
-    history_stride: int = 1,
-):
+def run_model(grid, params, options, days: int, dt: float, base_temperature: float):
     """
     Lance la simulation.
 
-    history_stride = 1   -> tous les pas sauvegardés
-    history_stride = 48  -> ~1 pas/jour si dt=1800s
+    Sortie :
+    T_history.shape = (N_steps + 1, N_THETA, N_PHI)
     """
+
     n_theta, n_phi = grid["lat_grid"].shape
     n_steps = int(days * 24 * 3600 / dt)
 
-    stride = max(1, int(history_stride))
+    T_history = np.zeros((n_steps + 1, n_theta, n_phi), dtype=np.float32)
 
-    n_store = (n_steps // stride) + 1
-    if n_steps % stride != 0:
-        n_store += 1  # on garde aussi l'état final
-
-    T_history = np.empty((n_store, n_theta, n_phi), dtype=np.float32)
-
-    T_current = initial_temperature(grid, base_temperature)
-    T_next = np.empty_like(T_current)
-    C = params["heat_capacity"]
-
-    store_idx = 0
-    T_history[store_idx] = T_current
+    T_history[0] = initial_temperature(grid, base_temperature)
 
     for n in tqdm(range(n_steps), desc="Simulation temporelle"):
         t_sec = n * dt
 
-        P_net = compute_energy_balance(
+        T_current = T_history[n].astype(float)
+
+        P_net, _ = compute_energy_balance(
             T_current,
             t_sec,
             grid,
             params,
-            options,
-            return_details=False,
+            options
         )
 
-        np.add(T_current, dt * P_net / C, out=T_next)
-        np.clip(T_next, 150.0, 350.0, out=T_next)
+        C = params["heat_capacity"]
 
-        step = n + 1
-        if (step % stride == 0) or (step == n_steps):
-            store_idx += 1
-            T_history[store_idx] = T_next
+        T_next = T_current + dt * P_net / C
 
-        T_current, T_next = T_next, T_current
+        # Sécurité numérique simple
+        T_next = np.clip(T_next, 150.0, 350.0)
 
-    return T_history[: store_idx + 1]
+        T_history[n + 1] = T_next.astype(np.float32)
+
+    return T_history

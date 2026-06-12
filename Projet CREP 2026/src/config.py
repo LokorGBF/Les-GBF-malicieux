@@ -33,7 +33,6 @@ OPTIONS = {
     "surface_infrared": True,
     "greenhouse": True,
     "evaporation": True,
-    "heat_capacity": True,
     "convection": False,
     "co2": False,
 }

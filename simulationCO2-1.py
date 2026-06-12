@@ -150,6 +150,6 @@ def read_astm_e490_data(file_path: Path, printed: bool = False, graph: bool = Fa
         plt.legend()
         plt.show()
 
-    return pd.DataFrame({"lambda_nm": lambda_nm, "E_nm": E_nm})
+    return df
 
 read_astm_e490_data(get_astm_e490_file(), printed=True, graph=True)

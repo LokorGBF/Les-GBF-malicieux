@@ -58,13 +58,12 @@ def AtmTetP() :
         T[i + 1] = T[i] + dT * dz
         P[i + 1] = P[i] + dP * dz
 
-# Modèle isotherme
+    # Modèle isotherme
+    def PisoT(z, T0=288):
+        return Psol * np.exp(-Mair * g * z / (R * T0))
 
 
-
-   
     return (T,P)
-#z= int(input("z"))
-#T,P=AtmTetP()
-#print(T[z],P[z])
+
+
 

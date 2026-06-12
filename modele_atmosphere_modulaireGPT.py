@@ -1,7 +1,7 @@
 """
-modele_atmosphere_modulaire_v2.py
+modele_atmosphere_modulaire.py
 
-Modèle radiatif beta V2, modulaire, avec stockage énergie/puissance.
+Modèle radiatif beta, volontairement simple mais proprement structuré.
 But : pouvoir remplacer plus tard les moles et/ou les épaisseurs optiques
 par un fichier CSV, une API, ou un autre module Python.
 
@@ -25,19 +25,14 @@ Auteur : version beta pédagogique.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from turtle import pd
 from typing import Callable, Dict, Iterable, List, Optional, Tuple, Any
 import csv
 import json
 import math
 import urllib.request
-import simulationCO21
 
 import numpy as np
 
-from pathlib import Path
-
-astm_file = Path("e490_00a_amo.xls")
 
 # ============================================================
 # Constantes physiques
@@ -85,7 +80,6 @@ DEFAULT_DRY_MOLE_FRACTIONS = {
 # ============================================================
 
 def trapz(y: np.ndarray, x: np.ndarray) -> float:
-    """Intégration numérique par trapèzes. Compatible NumPy récent/ancien."""
     if hasattr(np, "trapezoid"):
         return float(np.trapezoid(y, x))
     return float(np.trapz(y, x))
@@ -163,54 +157,6 @@ class Spectrum:
             flux_w_m2_um=self.flux_w_m2_um.copy(),
             name=self.name if name is None else name,
         )
-        
-    @classmethod
-    def from_dataframe_nm(
-        cls,
-        df: pd.DataFrame,
-        lambda_col: str = "lambda_nm",
-        flux_col: str = "E_nm",
-        name: str = "Spectre solaire ASTM E-490 AM0"
-    ) -> "Spectrum":
-        """
-        Crée un Spectrum à partir d'un DataFrame contenant :
-        - lambda_nm : longueur d'onde en nm
-        - E_nm : irradiance spectrale en W/m²/nm
-
-        Le modèle interne travaille en :
-        - lambda_um : µm
-        - flux_w_m2_um : W/m²/µm
-        """
-
-        if lambda_col not in df.columns:
-            raise ValueError(f"Colonne manquante : {lambda_col}")
-
-        if flux_col not in df.columns:
-            raise ValueError(f"Colonne manquante : {flux_col}")
-
-        lambda_nm = df[lambda_col].to_numpy(dtype=float)
-        E_nm = df[flux_col].to_numpy(dtype=float)
-
-        # Nettoyage des valeurs invalides
-        mask = np.isfinite(lambda_nm) & np.isfinite(E_nm) & (lambda_nm > 0) & (E_nm >= 0)
-
-        lambda_nm = lambda_nm[mask]
-        E_nm = E_nm[mask]
-
-        # Conversion nm -> µm
-        wavelengths_um = lambda_nm / 1000.0
-
-        # Conversion W/m²/nm -> W/m²/µm
-        flux_w_m2_um = E_nm * 1000.0
-
-        # Sécurité : tri par longueur d'onde croissante
-        order = np.argsort(wavelengths_um)
-
-        return cls(
-            wavelengths_um=wavelengths_um[order],
-            flux_w_m2_um=flux_w_m2_um[order],
-            name=name
-        )
 
     def integrate(self) -> float:
         """Flux total en W.m^-2."""
@@ -264,51 +210,6 @@ class Spectrum:
         return cls(wavelengths_um, planck_flux_per_um(wavelengths_um, temperature_K), name=name)
 
 
-
-# ============================================================
-# Classe PowerSpectrum
-# ============================================================
-
-@dataclass
-class PowerSpectrum:
-    """
-    Puissance spectrale émise ou absorbée par une cellule.
-
-    wavelengths_um : longueurs d'onde en micromètres.
-    power_w_um     : puissance spectrale en W.um^-1.
-
-    Différence avec Spectrum :
-    - Spectrum = flux surfacique spectral, W.m^-2.um^-1 ;
-    - PowerSpectrum = puissance totale de l'objet/cellule, W.um^-1.
-    """
-
-    wavelengths_um: np.ndarray
-    power_w_um: np.ndarray
-    name: str = "puissance spectrale"
-
-    def __post_init__(self) -> None:
-        self.wavelengths_um = np.asarray(self.wavelengths_um, dtype=float)
-        self.power_w_um = np.asarray(self.power_w_um, dtype=float)
-        if self.wavelengths_um.ndim != 1 or self.power_w_um.ndim != 1:
-            raise ValueError("wavelengths_um et power_w_um doivent être des tableaux 1D.")
-        if len(self.wavelengths_um) != len(self.power_w_um):
-            raise ValueError("wavelengths_um et power_w_um doivent avoir la même taille.")
-        if np.any(np.diff(self.wavelengths_um) <= 0):
-            raise ValueError("wavelengths_um doit être strictement croissant.")
-
-    def integrate(self) -> float:
-        """Puissance totale en W."""
-        return trapz(self.power_w_um, self.wavelengths_um)
-
-    def to_flux_spectrum(self, area_m2: float, name: Optional[str] = None) -> Spectrum:
-        """Convertit une puissance spectrale en flux spectral par unité de surface."""
-        area = max(float(area_m2), 1e-30)
-        return Spectrum(
-            self.wavelengths_um,
-            self.power_w_um / area,
-            name=name or self.name.replace("puissance", "flux"),
-        )
-
 # ============================================================
 # Classe AtmosphereCell
 # ============================================================
@@ -341,23 +242,7 @@ class AtmosphereCell:
     tau_abs_external: Optional[np.ndarray] = None
     tau_sca_external: Optional[np.ndarray] = None
 
-    # Énergie interne réellement stockée dans la cellule.
-    # Alias lisible : stored_energy_J, propriété définie plus bas.
     U_J: Optional[float] = None
-
-    # Puissance nette stockée au dernier pas : dU/dt en W.
-    # Positive : la couche chauffe ; négative : elle se refroidit.
-    stored_power_W: float = 0.0
-
-    # Diagnostics énergétiques du dernier pas.
-    last_absorbed_power_W: float = 0.0
-    last_scattered_power_W: float = 0.0
-    last_emitted_power_W: float = 0.0
-    last_net_power_W: float = 0.0
-
-    # Historiques simples, pratiques pour tracer après la simulation.
-    energy_history_J: List[float] = field(default_factory=list)
-    stored_power_history_W: List[float] = field(default_factory=list)
 
     def __post_init__(self) -> None:
         self.dx = float(self.dx)
@@ -373,19 +258,6 @@ class AtmosphereCell:
 
         if self.U_J is None:
             self.U_J = self.heat_capacity_J_K() * self.temperature_K
-
-        self.energy_history_J.append(float(self.U_J))
-        self.stored_power_history_W.append(float(self.stored_power_W))
-
-    @property
-    def stored_energy_J(self) -> float:
-        """Énergie interne stockée dans la couche, en J."""
-        return float(self.U_J)
-
-    @stored_energy_J.setter
-    def stored_energy_J(self, value: float) -> None:
-        self.U_J = float(value)
-        self.refresh_temperature_from_internal_energy()
 
     @property
     def area_m2(self) -> float:
@@ -425,141 +297,6 @@ class AtmosphereCell:
             self.refresh_internal_energy_from_temperature()
         else:
             self.refresh_temperature_from_internal_energy()
-
-    def record_power_budget(
-        self,
-        absorbed_power_W: float,
-        emitted_power_W: float,
-        scattered_power_W: float,
-        dt_s: float,
-    ) -> float:
-        """
-        Stocke le bilan de puissance du dernier pas et met à jour l'énergie.
-
-        absorbed_power_W : puissance réellement absorbée par la matière, donc qui chauffe.
-        emitted_power_W  : puissance thermique totale émise par la couche.
-        scattered_power_W: puissance diffusée. Elle sort du faisceau direct mais ne chauffe pas
-                           directement la couche dans ce modèle beta.
-        dt_s             : durée du pas de temps.
-
-        Retour : delta_U en J.
-        """
-        self.last_absorbed_power_W = float(absorbed_power_W)
-        self.last_emitted_power_W = float(emitted_power_W)
-        self.last_scattered_power_W = float(scattered_power_W)
-        self.last_net_power_W = self.last_absorbed_power_W - self.last_emitted_power_W
-        self.stored_power_W = self.last_net_power_W
-
-        delta_U = self.last_net_power_W * float(dt_s)
-        self.U_J = float(self.U_J) + delta_U
-        self.refresh_temperature_from_internal_energy()
-
-        self.energy_history_J.append(float(self.U_J))
-        self.stored_power_history_W.append(float(self.stored_power_W))
-        return delta_U
-
-    def spectral_emissivity(
-        self,
-        wavelengths_um: np.ndarray,
-        optical_provider: Optional[Any] = None,
-        tau_abs: Optional[np.ndarray] = None,
-        mu: float = 1.0,
-    ) -> np.ndarray:
-        """
-        Émissivité spectrale beta de la couche.
-
-        Idée physique utilisée : loi de Kirchhoff en équilibre local.
-        Une couche qui absorbe bien à une longueur d'onde émet bien à cette
-        même longueur d'onde. Dans ce modèle :
-
-            epsilon(lambda) = 1 - exp(-tau_abs(lambda) / mu)
-
-        tau_abs peut venir :
-        - d'un tableau externe déjà calculé ;
-        - d'un OpticalDepthProvider, donc de la composition en moles ;
-        - d'un CSV/API injecté plus tard dans la cellule.
-        """
-        wl = np.asarray(wavelengths_um, dtype=float)
-        mu = max(float(mu), 1e-6)
-
-        if tau_abs is None:
-            if optical_provider is None:
-                raise ValueError("Il faut fournir tau_abs ou optical_provider pour calculer l'émissivité.")
-            tau_abs, _tau_sca = optical_provider.get_tau(self, wl)
-
-        tau_abs = np.maximum(np.asarray(tau_abs, dtype=float), 0.0)
-        if len(tau_abs) != len(wl):
-            raise ValueError("tau_abs doit avoir la même taille que wavelengths_um.")
-
-        return 1.0 - np.exp(-tau_abs / mu)
-
-    def emitted_power_spectrum(
-        self,
-        wavelengths_um: np.ndarray,
-        optical_provider: Optional[Any] = None,
-        tau_abs: Optional[np.ndarray] = None,
-        sides: str = "both",
-        mu: float = 1.0,
-        name: Optional[str] = None,
-    ) -> PowerSpectrum:
-        """
-        Calcule la puissance thermique émise par la couche selon lambda.
-
-        Retour : PowerSpectrum en W.um^-1.
-
-        Formule beta :
-            P_lambda = A * facteur_faces * epsilon_lambda * F_blackbody_lambda(T)
-
-        avec :
-        - A = dx*dy ;
-        - F_blackbody_lambda = flux hémisphérique du corps noir, en W.m^-2.um^-1 ;
-        - epsilon_lambda = 1 - exp(-tau_abs_lambda/mu).
-
-        sides :
-        - "one"  : une seule face de la couche ;
-        - "both" : les deux faces, vers le haut et vers le bas.
-        """
-        wl = np.asarray(wavelengths_um, dtype=float)
-        epsilon = self.spectral_emissivity(
-            wl,
-            optical_provider=optical_provider,
-            tau_abs=tau_abs,
-            mu=mu,
-        )
-        blackbody_flux = planck_flux_per_um(wl, self.temperature_K)
-
-        if sides == "one":
-            face_factor = 1.0
-        elif sides == "both":
-            face_factor = 2.0
-        else:
-            raise ValueError("sides doit valoir 'one' ou 'both'.")
-
-        power_w_um = self.area_m2 * face_factor * epsilon * blackbody_flux
-        return PowerSpectrum(
-            wavelengths_um=wl,
-            power_w_um=np.maximum(power_w_um, 0.0),
-            name=name or f"émission thermique {self.name}",
-        )
-
-    def emitted_flux_spectrum(
-        self,
-        wavelengths_um: np.ndarray,
-        optical_provider: Optional[Any] = None,
-        tau_abs: Optional[np.ndarray] = None,
-        sides: str = "both",
-        mu: float = 1.0,
-        name: Optional[str] = None,
-    ) -> Spectrum:
-        """Même émission que emitted_power_spectrum, mais divisée par l'aire en W.m^-2.um^-1."""
-        return self.emitted_power_spectrum(
-            wavelengths_um=wavelengths_um,
-            optical_provider=optical_provider,
-            tau_abs=tau_abs,
-            sides=sides,
-            mu=mu,
-            name=name,
-        ).to_flux_spectrum(self.area_m2, name=name)
 
     def set_external_optical_depth(
         self,
@@ -906,12 +643,6 @@ class LayerRadiativeDiagnostic:
     absorbed_flux_w_m2: float
     scattered_flux_w_m2: float
     emitted_flux_total_w_m2: float
-    absorbed_power_W: float
-    scattered_power_W: float
-    emitted_power_W: float
-    net_stored_power_W: float
-    stored_energy_before_J: float
-    stored_energy_after_J: float
     delta_U_J: float
     mean_tau_abs: float
     mean_tau_sca: float
@@ -1025,27 +756,18 @@ class AtmosphereColumn:
             scattered_flux = trapz(scattered_spectral, self.wavelengths_um)
 
             # Émission thermique de la couche.
-            # Méthode physique beta centralisée dans AtmosphereCell.emitted_power_spectrum().
-            energy_before = cell.stored_energy_J
+            # Émissivité spectrale beta : epsilon(lambda) = 1 - exp(-tau_abs).
+            # On suppose une émission des deux faces de la couche.
             if include_thermal_emission:
-                emitted_power_spectrum = cell.emitted_power_spectrum(
-                    self.wavelengths_um,
-                    tau_abs=tau_abs,
-                    sides="both",
-                    mu=mu,
-                )
-                emitted_power_total = emitted_power_spectrum.integrate()
-                emitted_total_flux = emitted_power_total / cell.area_m2
+                emissivity = 1.0 - np.exp(-tau_abs)
+                one_side_blackbody = planck_flux_per_um(self.wavelengths_um, cell.temperature_K)
+                emitted_total_spectral = 2.0 * emissivity * one_side_blackbody
+                emitted_total_flux = trapz(emitted_total_spectral, self.wavelengths_um)
 
-                # La moitié de l'émission part vers le bas, l'autre moitié vers le haut.
-                emitted_down_spectral = 0.5 * emitted_power_spectrum.power_w_um / cell.area_m2
+                # La moitié est ajoutée au flux descendant, l'autre moitié part vers le haut.
+                emitted_down_spectral = 0.5 * emitted_total_spectral
             else:
-                emitted_power_spectrum = PowerSpectrum(
-                    self.wavelengths_um,
-                    np.zeros_like(self.wavelengths_um),
-                    name=f"émission nulle {cell.name}",
-                )
-                emitted_power_total = 0.0
+                emitted_total_spectral = np.zeros_like(self.wavelengths_um)
                 emitted_down_spectral = np.zeros_like(self.wavelengths_um)
                 emitted_total_flux = 0.0
 
@@ -1054,15 +776,9 @@ class AtmosphereColumn:
 
             # Bilan énergétique de la couche.
             # Diffusion pure : elle enlève du flux direct mais ne chauffe pas directement.
-            absorbed_power = cell.area_m2 * absorbed_flux
-            scattered_power = cell.area_m2 * scattered_flux
-            delta_U = cell.record_power_budget(
-                absorbed_power_W=absorbed_power,
-                emitted_power_W=emitted_power_total,
-                scattered_power_W=scattered_power,
-                dt_s=dt_s,
-            )
-            energy_after = cell.stored_energy_J
+            delta_U = cell.area_m2 * dt_s * (absorbed_flux - emitted_total_flux)
+            cell.U_J = float(cell.U_J) + delta_U
+            cell.refresh_temperature_from_internal_energy()
 
             spectrum = Spectrum(self.wavelengths_um, out_spectral, name=f"après {cell.name}")
             flux_out_total = spectrum.integrate()
@@ -1079,12 +795,6 @@ class AtmosphereColumn:
                     absorbed_flux_w_m2=absorbed_flux,
                     scattered_flux_w_m2=scattered_flux,
                     emitted_flux_total_w_m2=emitted_total_flux,
-                    absorbed_power_W=absorbed_power,
-                    scattered_power_W=scattered_power,
-                    emitted_power_W=emitted_power_total,
-                    net_stored_power_W=cell.stored_power_W,
-                    stored_energy_before_J=energy_before,
-                    stored_energy_after_J=energy_after,
                     delta_U_J=delta_U,
                     mean_tau_abs=float(np.mean(tau_abs)),
                     mean_tau_sca=float(np.mean(tau_sca)),
@@ -1205,7 +915,7 @@ def print_diagnostics(diags: List[LayerRadiativeDiagnostic], max_layers: Optiona
     print("\nDiagnostics par couche :")
     print(
         "idx | altitude(m) | T_avant -> T_apres (K) | "
-        "Flux in -> out (W/m2) | absorbe | emis | P_stockee(W) | Energie(J)"
+        "Flux in -> out (W/m2) | absorbe | diffuse | emis | dU(J)"
     )
     for d in shown:
         print(
@@ -1214,9 +924,9 @@ def print_diagnostics(diags: List[LayerRadiativeDiagnostic], max_layers: Optiona
             f"{d.temperature_before_K:7.2f} -> {d.temperature_after_K:7.2f} | "
             f"{d.flux_in_w_m2:8.2f} -> {d.flux_out_w_m2:8.2f} | "
             f"{d.absorbed_flux_w_m2:7.2f} | "
+            f"{d.scattered_flux_w_m2:7.2f} | "
             f"{d.emitted_flux_total_w_m2:7.2f} | "
-            f"{d.net_stored_power_W: .3e} | "
-            f"{d.stored_energy_after_J: .3e}"
+            f"{d.delta_U_J: .3e}"
         )
 
 
@@ -1270,49 +980,6 @@ def plot_temperature_profile(column: AtmosphereColumn) -> None:
     plt.show()
 
 
-
-def plot_energy_profile(column: AtmosphereColumn) -> None:
-    """Trace l'énergie stockée et la puissance stockée par couche."""
-    try:
-        import matplotlib.pyplot as plt
-    except ImportError:
-        print("matplotlib n'est pas installé. Fais : pip install matplotlib")
-        return
-
-    z = np.array([cell.altitude_m for cell in column.cells]) / 1000.0
-    U = np.array([cell.stored_energy_J for cell in column.cells])
-    P = np.array([cell.stored_power_W for cell in column.cells])
-
-    plt.figure()
-    plt.plot(U, z, marker="o")
-    plt.xlabel("Énergie interne stockée U (J)")
-    plt.ylabel("Altitude (km)")
-    plt.title("Énergie stockée par couche")
-    plt.grid(True)
-    plt.show()
-
-    plt.figure()
-    plt.plot(P, z, marker="o")
-    plt.xlabel("Puissance nette stockée dU/dt (W)")
-    plt.ylabel("Altitude (km)")
-    plt.title("Puissance stockée par couche")
-    plt.grid(True)
-    plt.show()
-
-
-def example_cell_emission() -> None:
-    """Petit exemple : émission spectrale d'une couche selon lambda et composition."""
-    wavelengths = np.linspace(1.0, 50.0, 2000)
-    atmosphere = AtmosphereColumn.beta_earth_column(n_layers=4, dz_m=1000.0, wavelengths_um=wavelengths)
-    cell = atmosphere.cells[-1]  # couche la plus proche du sol dans cette colonne beta
-
-    emitted = cell.emitted_power_spectrum(
-        wavelengths,
-        optical_provider=atmosphere.optical_provider,
-        sides="both",
-    )
-    print(f"Puissance thermique totale émise par {cell.name} : {emitted.integrate():.3e} W")
-
 # ============================================================
 # Exemple d'utilisation
 # ============================================================
@@ -1320,8 +987,6 @@ def example_cell_emission() -> None:
 def example_basic() -> None:
     """Exemple autonome avec données beta."""
 
-    df_astm = simulationCO21.read_astm_e490_data(get_astm_e490_file(), printed=True, graph=True)
-    
     # Grille spectrale : du proche UV à l'infrarouge thermique.
     wavelengths = np.linspace(0.2, 50.0, 2500)
 
@@ -1361,7 +1026,6 @@ def example_basic() -> None:
 
     plot_spectra(incoming, outgoing)
     plot_temperature_profile(atmosphere)
-    plot_energy_profile(atmosphere)
 
 
 def example_replace_moles_with_csv() -> None:

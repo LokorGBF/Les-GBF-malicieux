@@ -1,6 +1,7 @@
 import numpy as np
 
 # Lance la simulation
+
 from src.config import (
     N_THETA,
     N_PHI,
@@ -41,7 +42,7 @@ def main():
 
     heat_capacity = prepare_heat_capacity(
         grid,
-        use_variable_capacity=OPTIONS["heat_capacity"]
+        use_variable_capacity=True
     )
 
     evaporation_base = prepare_evaporation_base(
@@ -79,7 +80,8 @@ def main():
 
     print("\n=== Affichage ===")
     plot_temperature_map(T_history[-1], grid, filename="temperature_finale.png")
-    plot_temperature_curve(T_history, grid, lat_target=48.8566, lon_target=2.3522)
+    plot_temperature_curve(T_history, grid, lat_target = 48.8566, lon_target = 2.3522)
+
 
 
 if __name__ == "__main__":
