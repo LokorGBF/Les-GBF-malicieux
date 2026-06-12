@@ -6,6 +6,7 @@ class petitCubeAtmo:
         self.compositionMole = compositionMole # Composition de l'air en pourcentage
         self.temperature = 0 # Température en K
         self.U = 0 #energie interne en J
+        self.epaisseurOptique = 0 # Epaisseur optique du cube d'atmosphère, sans unité, calculée à partir de la composition de l'air et de la température
         
         
 def rayonmentApresCouche(atmosphere: list, rayonnementEntrant: float) -> float:
