@@ -4,6 +4,8 @@ class petitCubeAtmo:
         self.dy = dy
         self.dz = dz
         self.compositionMole = compositionMole # Composition de l'air en pourcentage
+        self.temperature = 0 # Température en K
+        self.U = 0 #energie interne en J
         
         
 def rayonmentApresCouche(atmosphere: list, rayonnementEntrant: float) -> float:
