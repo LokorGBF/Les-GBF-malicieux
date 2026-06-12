@@ -42,7 +42,7 @@ def main():
 
     heat_capacity = prepare_heat_capacity(
         grid,
-        use_variable_capacity=True
+        use_variable_capacity=OPTIONS["heat_capacity"]
     )
 
     evaporation_base = prepare_evaporation_base(
