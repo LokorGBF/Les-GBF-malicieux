@@ -64,7 +64,7 @@ def AtmTetP() :
 
    
     return (T,P)
-z= int(input("z"))
-T,P=AtmTetP()
-print(T[z],P[z])
+#z= int(input("z"))
+#T,P=AtmTetP()
+#print(T[z],P[z])
 
