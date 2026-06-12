@@ -80,7 +80,8 @@ DEFAULT_DRY_MOLE_FRACTIONS = {
 # ============================================================
 
 def trapz(y: np.ndarray, x: np.ndarray) -> float:
-    """Intégration numérique par trapèzes."""
+    if hasattr(np, "trapezoid"):
+        return float(np.trapezoid(y, x))
     return float(np.trapz(y, x))
 
 
