@@ -18,6 +18,10 @@ class Variable:
         for param in sig.parameters.keys():
             text += f"  - {param} ∈ {sig.parameters[param].annotation}\n"
         return text
+    
+    def __call__(self, *args, **kwargs):
+        return self.function(*args, **kwargs)
+    
 
 class Constant(Variable):
     def __init__(self, name: str, value: float | int):
@@ -32,6 +36,9 @@ class Constant(Variable):
 
     def __str__(self):
         return f"{self.name} = {self.function()}"
+    
+    def __call__(self):
+        return self.function()
 
 # Exemple d'utilisation
 if __name__ == "__main__":
