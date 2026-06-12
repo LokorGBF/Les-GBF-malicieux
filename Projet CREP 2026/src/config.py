@@ -10,11 +10,11 @@ SIMULATIONS_DIR = RESULTS_DIR / "simulations"
 FIGURES_DIR = RESULTS_DIR / "figures"
 
 # Grille sphérique : paramètres
-N_THETA = 18
-N_PHI = 36
+N_THETA = 140
+N_PHI = 280
 
 # Temps
-DAYS = 30       
+DAYS = 365       
 DT = 1800.0   # 30 min 
 
 # Température initiale
