@@ -7,7 +7,7 @@ Notre objectif est de modéliser le climat terrestre mondial au fur et a mesure 
 
 ---
 
-## 🎯 Objectifs de modélisation
+## Objectifs de modélisation
 
 Notre travail s'est divisé en plusieurs phases clés :
 
@@ -22,7 +22,7 @@ Notre travail s'est divisé en plusieurs phases clés :
 
 ---
 
-## 📁 Structure du projet
+## Structure du projet
 
 ```bash
 [Les-GBF-malicieux]/
@@ -35,7 +35,7 @@ Notre travail s'est divisé en plusieurs phases clés :
 
 ---
 
-## 🚀 Installation et Utilisation
+## Installation et Utilisation
 
 1. **Prérequis :**
    Assurez-vous d'avoir installé Python 3 et les bibliothèques suivantes :
