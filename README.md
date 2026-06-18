@@ -44,8 +44,13 @@ Notre travail s'est divisé en plusieurs phases clés :
    * `[OS]`
    * `[sys]`
    * `[matplotlib]`
-   * `[scipy.interpolate]`
+   * `[scipy]`
    * `[tqdm]`
+   * `[pandas]`
+   * `[xarray]`
+   * `[netCDF4]`
+   * `[geopandas]`
+   * `[shapely]`
 
  2. **Utiliser un environnement virtuel (Recommandé)**
 
