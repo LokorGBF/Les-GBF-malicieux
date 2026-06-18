@@ -5,13 +5,71 @@ import numpy as np
 import matplotlib.pyplot as plt
 from hapi import *
 
-from atmosphere_isotherme import gas_info_at_altitude, pressure_air, LAYERS, K_B, T0
+from atmosphere_isotherme import gas_info_at_altitude
 
 # =====================================================
-# Paramètres spectraux fixes
+# 0. Profil atmosphérique plus précis : T(z) et P(z)
 # =====================================================
 
-# Table de correspondance gaz -> (molecule_id, isotopologue) HITRAN
+def AtmTetP():
+    # Constantes physiques
+    G = 6.67e-11
+    Mair = 29e-3
+    R = 8.314
+    Mterre = 5.97e24
+    RT = 6378e3
+
+    # Conditions au sol
+    Tsol = 288.0
+    Psol = 1.013e5
+
+    # Gradient thermique ISA
+    def kISA(z):
+        if 0 <= z < 11e3:
+            return -6.5e-3
+        elif z < 20e3:
+            return 0.0
+        elif z < 32e3:
+            return 1.0e-3
+        elif z < 47e3:
+            return 2.8e-3
+        elif z < 51e3:
+            return 0.0
+        elif z < 71e3:
+            return -2.8e-3
+        elif z <= 85e3:
+            return -2.0e-3
+        else:
+            return 0.0
+
+    # Discrétisation altitude
+    N = 10000
+    Z = np.linspace(0, 85e3, N)
+    dz = Z[1] - Z[0]
+
+    T = np.zeros(N)
+    P = np.zeros(N)
+
+    T[0] = Tsol
+    P[0] = Psol
+
+    for i in range(N - 1):
+        z = Z[i]
+        g = G * Mterre / (RT + z)**2
+
+        dT_dz = kISA(z)
+        dP_dz = -(Mair * g / (R * T[i])) * P[i]
+
+        T[i + 1] = T[i] + dT_dz * dz
+        P[i + 1] = P[i] + dP_dz * dz
+
+    return Z, T, P
+
+
+# =====================================================
+# 1. Paramètres spectraux fixes
+# =====================================================
+
 HITRAN_IDS = {
     "CO2": (2, 1),
     "H2O": (1, 1),
@@ -21,22 +79,20 @@ HITRAN_IDS = {
     "O2":  (7, 1),
 }
 
-# Bandes spectrales par gaz (cm^-1)
 SPECTRAL_BANDS = {
-    "CO2": (600.0, 750.0),    # bande 15 µm
+    "CO2": (600.0, 750.0),
     "H2O": (200.0, 800.0),
-    "O3":  (980.0, 1100.0),   # bande 9.6 µm
+    "O3":  (980.0, 1100.0),
     "N2O": (500.0, 800.0),
     "CH4": (1200.0, 1400.0),
     "O2":  (7500.0, 8000.0),
 }
 
-DNU = 0.05    # pas spectral cm^-1
+DNU = 0.05
 K_B = 1.380_649e-23
-T0  = 288.0   # température isotherme du modèle atmosphérique
 
 # =====================================================
-# 1. Demande des paramètres
+# 2. Demande des paramètres
 # =====================================================
 
 print("=" * 55)
@@ -57,45 +113,56 @@ if z_min < 0 or z_max < 0:
 if z_max <= z_min:
     raise ValueError("Il faut que z_max > z_min.")
 
+# Important : ce nouveau profil n'est défini que jusqu'à 85 km
+if z_max > 85_000:
+    raise ValueError("Avec ce modèle ISA, l'altitude maximale est 85 000 m.")
+
 mol_id, iso_id = HITRAN_IDS[gas]
 NU_MIN, NU_MAX = SPECTRAL_BANDS[gas]
 
 # =====================================================
-# 2. Profil atmosphérique sur la couche [z_min, z_max]
+# 3. Construction du profil atmosphérique sur [z_min, z_max]
 # =====================================================
+
+Z_atm, T_atm, P_atm_profile = AtmTetP()
 
 N_z = 500
 Z_grid = np.linspace(z_min, z_max, N_z)
 delta_z = z_max - z_min
 
-# Pression totale à chaque altitude (Pa)
-P_grid = np.array([pressure_air(z) for z in Z_grid])
+# Interpolation de T(z) et P(z) sur la couche choisie
+T_grid = np.interp(Z_grid, Z_atm, T_atm)
+P_grid = np.interp(Z_grid, Z_atm, P_atm_profile)
 
-# xi et densité numérique du gaz à chaque altitude
+# xi(z) du gaz via ton code atmosphérique
 xi_grid = np.zeros(N_z)
-n_grid = np.zeros(N_z)   # molécules/m³
 
 for i, z in enumerate(Z_grid):
     info = gas_info_at_altitude(z, gas)
     xi_grid[i] = info["xi"]
-    n_grid[i] = info["number_density_molecules_m3"]
 
-# Pression et xi moyens sur la couche (pour HAPI)
+# Densité numérique recalculée avec le NOUVEAU profil de pression
+# n(z) = xi(z) * P(z) / (k_B * T(z))
+n_grid = xi_grid * P_grid / (K_B * T_grid)
+
+# Moyennes sur la couche
 P_mean = np.trapz(P_grid, Z_grid) / delta_z
+T_mean = np.trapz(T_grid, Z_grid) / delta_z
 xi_mean = np.trapz(xi_grid, Z_grid) / delta_z
-P_mean_atm = P_mean / 101_325.0
+P_mean_atm = P_mean / 101325.0
 
-# Colonne moléculaire intégrée : ∫ n(z) dz  [molécules/m²]
+# Colonne moléculaire
 colonne = np.trapz(n_grid, Z_grid)
 
 print(f"\n→ Gaz            : {gas}")
 print(f"→ Couche         : {z_min:.0f} → {z_max:.0f} m")
 print(f"→ xi moyen       : {xi_mean:.4e}")
-print(f"→ P moyenne      : {P_mean:.2f} Pa  ({P_mean_atm:.5f} atm)")
+print(f"→ T moyenne      : {T_mean:.2f} K")
+print(f"→ P moyenne      : {P_mean:.2f} Pa ({P_mean_atm:.5f} atm)")
 print(f"→ Colonne        : {colonne:.4e} molécules/m²")
 
 # =====================================================
-# 3. Données HITRAN et section efficace
+# 4. Données HITRAN et section efficace
 # =====================================================
 
 table_name = f"{gas}_band"
@@ -105,7 +172,7 @@ fetch(table_name, mol_id, iso_id, NU_MIN, NU_MAX)
 nu, sigma_cm2 = absorptionCoefficient_Voigt(
     Components=((mol_id, iso_id),),
     SourceTables=table_name,
-    Environment={"p": P_mean_atm, "T": T0},
+    Environment={"p": P_mean_atm, "T": T_mean},
     OmegaRange=[NU_MIN, NU_MAX],
     OmegaStep=DNU,
     HITRAN_units=True,
@@ -114,30 +181,29 @@ nu, sigma_cm2 = absorptionCoefficient_Voigt(
 
 nu = np.array(nu)
 sigma_cm2 = np.array(sigma_cm2)
-sigma_m2 = sigma_cm2 * 1e-4       # cm²/molécule -> m²/molécule
-lambda_um = 1e4 / nu              # cm^-1 -> µm
+sigma_m2 = sigma_cm2 * 1e-4
+lambda_um = 1e4 / nu
 
 # =====================================================
-# 4. Épaisseur optique spectrale
-#    tau(nu) = sigma(nu) * colonne
+# 5. Épaisseur optique spectrale
 # =====================================================
 
 tau = sigma_m2 * colonne
 
 # =====================================================
-# 5. Épaisseur optique effective (moyenne Planck)
+# 6. Épaisseur optique effective
 # =====================================================
 
 transmittance = np.where(tau > 700, 0.0, np.exp(-tau))
 
-c2 = 1.438_776_877        # cm·K
-poids_planck = nu**3 / np.expm1(c2 * nu / T0)
+c2 = 1.438776877  # cm.K
+poids_planck = nu**3 / np.expm1(c2 * nu / T_mean)
 
 T_bande = np.trapz(poids_planck * transmittance, nu) / np.trapz(poids_planck, nu)
 tau_eff = -np.log(T_bande) if T_bande > 0 else np.inf
 
 # =====================================================
-# 6. Résultats
+# 7. Résultats
 # =====================================================
 
 print("\n" + "=" * 55)
@@ -148,6 +214,7 @@ print(f"Bande spectrale        : {NU_MIN}–{NU_MAX} cm⁻¹")
 print(f"Couche                 : {z_min:.0f} → {z_max:.0f} m")
 print(f"Épaisseur de couche    : {delta_z:.0f} m")
 print(f"xi moyen               : {xi_mean:.4e}")
+print(f"T moyenne              : {T_mean:.2f} K")
 print(f"P moyenne              : {P_mean:.2f} Pa")
 print(f"Colonne                : {colonne:.4e} molécules/m²")
 print(f"Transmittance moyenne  : {T_bande:.4e}")
@@ -162,7 +229,7 @@ print(f"  σ_max = {sigma_cm2[i_max]:.3e} cm²/molécule")
 print(f"  τ_max = {tau[i_max]:.3e}")
 
 # =====================================================
-# 7. Graphique unique : épaisseur optique
+# 8. Graphique unique : épaisseur optique
 # =====================================================
 
 plt.figure()
@@ -172,7 +239,7 @@ plt.xlabel("λ (µm)")
 plt.ylabel("τ")
 plt.title(
     f"Épaisseur optique — {gas}\n"
-    f"couche {z_min:.0f}–{z_max:.0f} m | xi_moy = {xi_mean:.2e} | τ_eff = {tau_eff:.3f}"
+    f"couche {z_min:.0f}–{z_max:.0f} m | Tmoy={T_mean:.1f} K | τ_eff={tau_eff:.3f}"
 )
 plt.grid(True)
 plt.tight_layout()
