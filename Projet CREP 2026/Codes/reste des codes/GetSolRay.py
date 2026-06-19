@@ -89,36 +89,58 @@ def get_astm_e490_file(project_root: Path | None = None) -> Path:
 
 # Lecture du fichier et extraction des données des E-lamda
 
-def read_astm_e490_data(file_path: Path, printed: bool = False, graph: bool = False, xlim_nm: tuple[float, float] = (250, 1200)) -> pd.DataFrame:
+def read_astm_e490_data(file_path: Path | str | None = None, printed: bool = False, graph: bool = False, xlim_nm: tuple[float, float] = (250, 1200)) -> pd.DataFrame:
     """
-    Lit le fichier ASTM E-490 et retourne un DataFrame avec les longueurs d'onde en nm et les irradiances en W/m²/nm.
-    Renvoie un DataFrame avec les colonnes "lambda_nm" et "E_nm".
+    Lit le fichier ASTM E-490 et retourne un DataFrame nettoyé.
+
+    Le DataFrame retourné contient au minimum :
+    - "lambda_um": longueur d'onde en micromètres (µm)
+    - "P_um": irradiance en W/m²/µm
+
+    Pour commodité, les colonnes suivantes sont aussi ajoutées :
+    - "lambda_nm": longueur d'onde en nm
+    - "P_nm": irradiance en W/m²/nm
 
     Paramètres :
-    - file_path : chemin vers le fichier e490_00a_amo.xls
+    - file_path : chemin vers le fichier e490_00a_amo.xls (optionnel)
     - printed : affiche les premières lignes du DataFrame
     - graph : affiche un graphique du spectre solaire
     - xlim_nm : tuple (min, max) pour limiter l'affichage du graphique
     """
 
-    astm_path = get_astm_e490_file()
-    df = pd.read_excel(astm_path, sheet_name="NewAM0")
+    # Résolution du chemin de fichier (utilise le downloader si absent)
+    astm_path = None
+    if file_path:
+        astm_path = Path(file_path)
+        if not astm_path.exists():
+            astm_path = None
 
+    if astm_path is None:
+        astm_path = get_astm_e490_file()
 
-    lambda_µm = df.iloc[:, 0]
-    E_µm = df.iloc[:, 1]
-    # µm -> nm
-    lambda_nm = lambda_µm * 1000
-    E_nm = E_µm / 1000
+    df_raw = pd.read_excel(astm_path, sheet_name="NewAM0")
+
+    # Colonnes brutes : première colonne = longueur d'onde (µm), seconde = irradiance (W/m²/µm)
+    lambda_um = pd.to_numeric(df_raw.iloc[:, 0], errors="coerce")
+    P_um = pd.to_numeric(df_raw.iloc[:, 1], errors="coerce")
+
+    df = pd.DataFrame({
+        "lambda_um": lambda_um,
+        "P_um": P_um,
+    })
+
+    # Ajouter versions en nm pour compatibilité graphique
+    df["lambda_nm"] = df["lambda_um"] * 1000
+    df["P_nm"] = df["P_um"] / 1000
 
     if printed:
         print(df.head())
 
     if graph:
-        mask = (lambda_nm >= xlim_nm[0]) & (lambda_nm <= xlim_nm[1])
+        mask = (df["lambda_nm"] >= xlim_nm[0]) & (df["lambda_nm"] <= xlim_nm[1])
 
-        lambda_plot = lambda_nm[mask]
-        E_plot = E_nm[mask]
+        lambda_plot = df.loc[mask, "lambda_nm"]
+        E_plot = df.loc[mask, "P_nm"]
 
         colors = [
             rgb_255_to_mpl(wavelength_to_rgb(lam))
@@ -152,4 +174,14 @@ def read_astm_e490_data(file_path: Path, printed: bool = False, graph: bool = Fa
 
     return df
 
-read_astm_e490_data(get_astm_e490_file(), printed=True, graph=True)
+def get_sol_ray():
+    """
+    Retourne un tableau DataFrame avec les longueurs d'onde en µm ["lambda_um"] et les irradiances en W/m²/µm (microns) ["P_um"].
+    """
+    astm_path = get_astm_e490_file()
+    df = read_astm_e490_data(astm_path, printed=False, graph=False)
+    # Renvoie uniquement les colonnes utile
+
+if __name__ == "__main__":
+    read_astm_e490_data(get_astm_e490_file(), printed=False, graph=True)
+    print(get_sol_ray())
