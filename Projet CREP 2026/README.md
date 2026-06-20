@@ -25,15 +25,13 @@ Notre travail s'est divisé en plusieurs phases clés :
 ## Structure du projet
 
 ```bash
-[Les-GBF-malicieux]/
-├── [Codes]/               # Tous nos scripts Python et modules de calcul
-├── [Donnees]/             # Fichiers de données lourds (isolés pour faciliter la réutilisation)
-├── [Documentation]/       # Explications et sources
+Les-GBF-malicieux/
+├── Codes/                 # Tous nos scripts Python et le code source de la simulation
+├── Donnees/               # Fichiers de données lourds (isolés dans un dossier séparé)
+├── Ressources/            # Documentation, sources, schémas et le reste des données
+├── .gitignore             # Liste des fichiers/dossiers ignorés par Git (ex: .venv, .vscode)
 ├── synthese.pdf           # Notre document de synthèse final
 └── README.md              # Ce fichier
-```
-
----
 
 ## Installation et Utilisation
 
