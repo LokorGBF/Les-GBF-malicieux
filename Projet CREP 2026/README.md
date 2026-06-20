@@ -56,7 +56,7 @@ Si l'installation des bibliothèques rencontre des problèmes (comme des conflit
 
 
 3. **Lancer le fichier principale :**
+
    ```bash
    python [Nom_du_script_principal_si_y'en_a_un_jsp_peut_etre_pas_on_verra.py]
-   ```
 
