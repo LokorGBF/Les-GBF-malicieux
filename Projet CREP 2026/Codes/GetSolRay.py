@@ -181,6 +181,7 @@ def get_sol_ray():
     astm_path = get_astm_e490_file()
     df = read_astm_e490_data(astm_path, printed=False, graph=False)
     # Renvoie uniquement les colonnes utile
+    return df.loc[:, ["lambda_um", "P_um"]]
 
 if __name__ == "__main__":
     read_astm_e490_data(get_astm_e490_file(), printed=False, graph=True)
