@@ -33,53 +33,67 @@ Ces paramètres permettent de comparer les gaz dans des conditions identiques.
 <summary><strong>Fichiers du dossier</strong></summary>
 
 <details>
-<summary><code>- `spectraplot_H2O.png` : spectre d’absorption de la vapeur d’eau</code>.</summary>
+<summary><code>- spectraplot_H2O.png : spectre d’absorption de la vapeur d’eau</code>.</summary>
+  
 - La vapeur d’eau absorbe fortement dans certaines zones de l’infrarouge, notamment aux faibles fréquences du graphique.
 - C’est un gaz très important dans l’effet de serre, car son absorption est large et intense.
 - Ce fichier est disponible [ici](https://github.com/LokorGBF/Les-GBF-malicieux/blob/401aa1d7a404c0ec50800dcd98b6d59926db25b7/Projet%20CREP%202026/ressources/SpectresHitran/spectraplot_H2O.png)
+
 </details>
 
 <details>
-<summary><code>- `spectraplot_CO2.png` : spectre d’absorption du dioxyde de carbone</code>.</summary>
+<summary><code>- spectraplot_CO2.png : spectre d’absorption du dioxyde de carbone</code>.</summary>
+  
 - Le CO₂ présente une bande d’absorption importante autour de `650–700 cm⁻¹`, correspondant à une longueur d’onde proche de `15 µm`.
 - Cette zone est très importante car elle se situe dans le domaine d’émission infrarouge de la Terre.
 - Ce fichier est disponible [ici](https://github.com/LokorGBF/Les-GBF-malicieux/blob/401aa1d7a404c0ec50800dcd98b6d59926db25b7/Projet%20CREP%202026/ressources/SpectresHitran/spectraplot_CO2.png)
+  
 </details>
 
 <details>
-<summary><code>- `spectraplot_CH4.png` : spectre d’absorption du méthane.</code></summary>
+<summary><code>- spectraplot_CH4.png : spectre d’absorption du méthane.</code></summary>
+  
 - Le CH₄ absorbe principalement autour de `1200–1400 cm⁻¹`, soit environ `7–8 µm`.
 - Même s’il est moins abondant que le CO₂, il absorbe fortement dans certaines bandes précises.
 - Ce fichier est disponible [ici](https://github.com/LokorGBF/Les-GBF-malicieux/blob/54f6ce85082fba3dc70c541f32cf24d7713480e1/Projet%20CREP%202026/ressources/SpectresHitran/spectraplot_CH4.png)
+
 </details>
 
 <details>
-<summary><code>- `spectraplot_O3.png` : spectre d’absorption de l’ozone.</code></summary>
+<summary><code>- spectraplot_O3.png : spectre d’absorption de l’ozone.</code></summary>
+  
 - L’ozone possède une bande d’absorption marquée autour de `1000–1100 cm⁻¹`, soit environ `9–10 µm`.
 - Cette zone se trouve dans la fenêtre infrarouge atmosphérique, donc l’ozone peut influencer la sortie du rayonnement terrestre vers l’espace.
 - Ce fichier est disponible [ici](https://github.com/LokorGBF/Les-GBF-malicieux/blob/54f6ce85082fba3dc70c541f32cf24d7713480e1/Projet%20CREP%202026/ressources/SpectresHitran/spectraplot_O3.png)
+
 </details>
 
 <details>
-<summary><code>- `spectraplot_N2.png` : spectre d’absorption du diazote.</code></summary>
+<summary><code>- spectraplot_N2.png : spectre d’absorption du diazote.</code></summary>
+  
 - Le N₂ absorbe très peu dans l’infrarouge.
 - L’échelle d’absorbance est extrêmement faible, ce qui montre que le diazote contribue très peu directement à l’effet de serre.
 - Ce fichier est disponible [ici](https://github.com/LokorGBF/Les-GBF-malicieux/blob/54f6ce85082fba3dc70c541f32cf24d7713480e1/Projet%20CREP%202026/ressources/SpectresHitran/spectraplot_N2.png)
+
 </details>
 
 <details>
-<summary><code>- `spectraplot_O2.png` : spectre d’absorption du dioxygène.</code></summary>
+<summary><code>- spectraplot_O2.png : spectre d’absorption du dioxygène.</code></summary>
+  
 - Le O₂ absorbe aussi très peu dans l’infrarouge.
 - Comme pour le N₂, son absorbance est très faible, donc il participe peu directement à l’effet de serre.
 - Ce fichier est disponible [ici](https://github.com/LokorGBF/Les-GBF-malicieux/blob/54f6ce85082fba3dc70c541f32cf24d7713480e1/Projet%20CREP%202026/ressources/SpectresHitran/spectraplot_O2.png)
+
 </details>
 
 <details>
-<summary><code>- `Spectre_complet_gazs_et_terre.png` : graphique comparatif regroupant les spectres de plusieurs gaz et le spectre d’émission terrestre.</code></summary>
+<summary><code>- Spectre_complet_gazs_et_terre.png : graphique comparatif regroupant les spectres de plusieurs gaz et le spectre d’émission terrestre.</code></summary>
+  
 - Il permet de comparer directement les bandes d’absorption de `H2O`, `CO2`, `CH4`, `N2`, `O2` et `O3`.
 - La courbe rouge représente le **spectre d’émission de la Terre**, approximé pour une température d’environ `287 K`.
 - Ce fichier permet de voir quels gaz absorbent dans les zones où la Terre émet le plus d’énergie infrarouge.
 - Ce fichier est disponible [ici](https://github.com/LokorGBF/Les-GBF-malicieux/blob/f1c338fa7d8ded2c27831a0aea1d75a7b7fe0431/Projet%20CREP%202026/ressources/SpectresHitran/Spectre_complet_gazs_et_terre.png)
+
   
 </details>
 
