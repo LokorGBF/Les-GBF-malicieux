@@ -7,7 +7,7 @@ Notre objectif est de modéliser le climat terrestre mondial au fur et à mesure
 
 ---
 
-## Guide
+## Structure
 
 | Dossier | Année | Description |
 |---|---|---|
