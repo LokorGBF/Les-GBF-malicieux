@@ -7,9 +7,9 @@ from hapi import *
 
 from atmosphere_isotherme import gas_info_at_altitude
 
-# =====================================================
-# 0. Profil atmosphérique plus précis : T(z) et P(z)
-# =====================================================
+
+#Profil atmosphérique plus précis : T(z) et P(z)
+
 
 def AtmTetP():
     # Constantes physiques
@@ -66,9 +66,8 @@ def AtmTetP():
     return Z, T, P
 
 
-# =====================================================
-# 1. Paramètres spectraux fixes
-# =====================================================
+#Paramètres spectraux fixes
+
 
 HITRAN_IDS = {
     "CO2": (2, 1),
@@ -91,9 +90,9 @@ SPECTRAL_BANDS = {
 DNU = 0.05
 K_B = 1.380_649e-23
 
-# =====================================================
-# 2. Demande des paramètres
-# =====================================================
+
+#Demande des paramètres
+
 
 print("=" * 55)
 print("  Calcul de l'épaisseur optique (bandes IR)")
@@ -120,9 +119,9 @@ if z_max > 85_000:
 mol_id, iso_id = HITRAN_IDS[gas]
 NU_MIN, NU_MAX = SPECTRAL_BANDS[gas]
 
-# =====================================================
-# 3. Construction du profil atmosphérique sur [z_min, z_max]
-# =====================================================
+
+# Construction du profil atmosphérique sur [z_min, z_max]
+
 
 Z_atm, T_atm, P_atm_profile = AtmTetP()
 
@@ -161,9 +160,9 @@ print(f"→ T moyenne      : {T_mean:.2f} K")
 print(f"→ P moyenne      : {P_mean:.2f} Pa ({P_mean_atm:.5f} atm)")
 print(f"→ Colonne        : {colonne:.4e} molécules/m²")
 
-# =====================================================
-# 4. Données HITRAN et section efficace
-# =====================================================
+
+# Données HITRAN et section efficace
+
 
 table_name = f"{gas}_band"
 db_begin("hitran_data")
@@ -184,15 +183,15 @@ sigma_cm2 = np.array(sigma_cm2)
 sigma_m2 = sigma_cm2 * 1e-4
 lambda_um = 1e4 / nu
 
-# =====================================================
-# 5. Épaisseur optique spectrale
-# =====================================================
+
+#  Épaisseur optique spectrale
+
 
 tau = sigma_m2 * colonne
 
-# =====================================================
-# 6. Épaisseur optique effective
-# =====================================================
+
+#  Épaisseur optique effective
+
 
 transmittance = np.where(tau > 700, 0.0, np.exp(-tau))
 
@@ -202,9 +201,9 @@ poids_planck = nu**3 / np.expm1(c2 * nu / T_mean)
 T_bande = np.trapz(poids_planck * transmittance, nu) / np.trapz(poids_planck, nu)
 tau_eff = -np.log(T_bande) if T_bande > 0 else np.inf
 
-# =====================================================
-# 7. Résultats
-# =====================================================
+
+#  Résultats
+
 
 print("\n" + "=" * 55)
 print("  RÉSULTATS")
@@ -228,9 +227,8 @@ print(f"  λ     = {lambda_um[i_max]:.3f} µm")
 print(f"  σ_max = {sigma_cm2[i_max]:.3e} cm²/molécule")
 print(f"  τ_max = {tau[i_max]:.3e}")
 
-# =====================================================
-# 8. Graphique unique : épaisseur optique
-# =====================================================
+#  Graphique unique : épaisseur optique
+
 
 plt.figure()
 plt.semilogy(lambda_um, tau, color="darkorange")
