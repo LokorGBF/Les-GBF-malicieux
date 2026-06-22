@@ -197,22 +197,39 @@ def simulate_radiative_transfer(CO2_fraction, z_max = 80000, delta_z = 10, lambd
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-# MAIN
-## Nouvelle fonction pour l'effet de serre 
-CO2_fraction = 280e-6
-factors= np.arange(0.1,2,0.1)
-flux_TOA_selon_frCO2= []
-for factor in factors:# voir la valeur de début d'itératiion selon des valeurs réalistes de ppm de CO2
-    current_CO2 = CO2_fraction*factor
+# ======================================================================================================================
+# MAIN : ÉVOLUTION DU FLUX SORTANT AU SOMMET DE L'ATMOSPHÈRE (TOA) EN FONCTION DU CO2
+# ======================================================================================================================
+
+# Configuration des paramètres de concentration
+CO2_fraction = 280e-6            # Concentration préindustrielle de référence (280 ppm)
+factors = np.arange(0.5, 2, 0.5) # Facteurs multiplicateurs (de 10% à 190% de la valeur de référence)
+flux_TOA_selon_frCO2 = []        # Liste pour stocker le flux infrarouge s'échappant vers l'espace
+
+# Boucle de simulation du transfert radiatif
+for factor in factors:
+    # Calcul de la concentration en CO2 pour l'étape actuelle
+    current_CO2 = CO2_fraction * factor
+    
+    # Calcul des flux avec le modèle à deux flux
     lambda_range, z_range, upward_flux, downward_flux, optical_thickness = simulate_radiative_transfer(current_CO2)
-    delta_lambda = lambda_range[1] - lambda_range[0] # a voir l'utilité car c tjrs la meme chose
-    flux_TOA_selon_frCO2.append( upward_flux[-1, :].sum())  #TOA=TOp of atmosphere 
-flux_TOA_selon_frCO2=np.array(flux_TOA_selon_frCO2)
-plt.plot(factors*CO2_fraction*1e6,flux_TOA_selon_frCO2)
+    delta_lambda = lambda_range[1] - lambda_range[0] # Utile si la résolution spectrale varie
+    
+    # Extraction du flux MONTANT au SOMMET de l'atmosphère (indice -1 pour la couche la plus haute, z_max)
+    # On intègre (somme) l'énergie sur tout le spectre des longueurs d'onde
+    flux_TOA_selon_frCO2.append(upward_flux[-1, :].sum())  
+
+# Conversion en tableau NumPy pour faciliter les manipulations graphiques
+flux_TOA_selon_frCO2 = np.array(flux_TOA_selon_frCO2)
+
+# Construction et affichage du graphique
+# Conversion de la fraction de CO2 sur l'axe X en parties par million (ppm) via le multiplicateur 1e6
+plt.plot(factors * CO2_fraction * 1e6, flux_TOA_selon_frCO2)
 plt.xlabel("CO₂ (ppm)")
 plt.ylabel("Flux TOA (W/m²)")
+plt.title("Impact du CO₂ sur le flux sortant au sommet de l'atmosphère")
 plt.grid(True)
 
-
+# Affichage de la fenêtre graphique
 plt.show()
 # ----------------------------------------------------------------------------------------------------------------------

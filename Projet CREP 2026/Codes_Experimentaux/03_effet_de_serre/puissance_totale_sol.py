@@ -231,7 +231,7 @@ flux_sol_selon_frCO2 = np.array(flux_sol_selon_frCO2)
 flux_total_sol = flux_sol_selon_frCO2 + puissance_recu_soleil
 
 # Tracé de la courbe finale (Conversion de la fraction de CO2 en ppm sur l'axe X)
-plt.plot(factors * CO2_fraction * 1e6, flux_total_sol, '-o', color='tab:red')
+plt.plot(factors * CO2_fraction * 1e6, flux_total_sol)
 plt.xlabel("CO₂ (ppm)")
 plt.ylabel("Flux reçu par le sol (W/m²)")
 plt.title("Impact de la concentration en CO₂ sur le flux total absorbé au sol")
