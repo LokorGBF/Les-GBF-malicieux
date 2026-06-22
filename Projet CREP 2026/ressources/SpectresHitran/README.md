@@ -1,5 +1,5 @@
 <details>
-<summary># Fichier README des ressources</summary>
+<summary> Fichier README des ressources</summary>
 
 Récapitulatif du dossier `ressources`:
 
@@ -7,7 +7,7 @@ Ce dossier regroupe les fichiers nécessaires aux différents modèles utilisés
 </details>
 
 <details>
-<summary>## Dossier _SpectreHitran_</summary> 
+<summary> Dossier _SpectreHitran_</summary> 
 
 Ce dossier contient les **spectres d’absorption infrarouge** de plusieurs gaz atmosphériques, générés à partir de la base de données **HITRAN** et affichés sous forme de graphiques.
 
@@ -17,7 +17,7 @@ Ces fichiers servent à identifier les zones du rayonnement infrarouge terrestre
 </details>
 
 <details>
-<summary>### Paramètres utilisés dans les spectres individuels</summary>
+<summary> Paramètres utilisés dans les spectres individuels</summary>
 
 Pour les spectres individuels :
 
@@ -30,46 +30,46 @@ Ces paramètres permettent de comparer les gaz dans des conditions identiques.
 </details>
 
 <details>
-<summary>### Fichiers du dossier</summary>
+<summary><strong> Fichiers du dossier</strong></summary>
 
   <details>
-  <summary>- `spectraplot_H2O.png` : spectre d’absorption de la **vapeur d’eau**.</summary>
+  <summary><code>- `spectraplot_H2O.png` : spectre d’absorption de la **vapeur d’eau**</code>.</summary>
     - La vapeur d’eau absorbe fortement dans certaines zones de l’infrarouge, notamment aux faibles fréquences du graphique.
     - C’est un gaz très important dans l’effet de serre, car son absorption est large et intense.
   </details>
 
   <details>
-  <summary>- `spectraplot_CO2.png` : spectre d’absorption du **dioxyde de carbone**.</summary>
+  <summary><code>- `spectraplot_CO2.png` : spectre d’absorption du **dioxyde de carbone**</code>.</summary>
     - Le CO₂ présente une bande d’absorption importante autour de `650–700 cm⁻¹`, correspondant à une longueur d’onde proche de `15 µm`.
     - Cette zone est très importante car elle se situe dans le domaine d’émission infrarouge de la Terre.
   </details>
 
   <details>
-  <summary>- `spectraplot_CH4.png` : spectre d’absorption du **méthane**.</summary>
+  <summary><code>- `spectraplot_CH4.png` : spectre d’absorption du **méthane**.</code></summary>
     - Le CH₄ absorbe principalement autour de `1200–1400 cm⁻¹`, soit environ `7–8 µm`.
     - Même s’il est moins abondant que le CO₂, il absorbe fortement dans certaines bandes précises.
   </details>
 
   <details>
-  <summary>- `spectraplot_O3.png` : spectre d’absorption de l’**ozone**.</summary>
+  <summary><code>- `spectraplot_O3.png` : spectre d’absorption de l’**ozone**.</code></summary>
     - L’ozone possède une bande d’absorption marquée autour de `1000–1100 cm⁻¹`, soit environ `9–10 µm`.
     - Cette zone se trouve dans la fenêtre infrarouge atmosphérique, donc l’ozone peut influencer la sortie du rayonnement terrestre vers l’espace.
   </details>
 
   <details>
-  <summary>- `spectraplot_N2.png` : spectre d’absorption du **diazote**.</summary>
+  <summary><code>- `spectraplot_N2.png` : spectre d’absorption du **diazote**.</code></summary>
     - Le N₂ absorbe très peu dans l’infrarouge.
     - L’échelle d’absorbance est extrêmement faible, ce qui montre que le diazote contribue très peu directement à l’effet de serre.
   </details>
 
 <details>
-<summary>- `spectraplot_O2.png` : spectre d’absorption du **dioxygène**.</summary>
+<summary><code>- `spectraplot_O2.png` : spectre d’absorption du **dioxygène**.</code></summary>
   - Le O₂ absorbe aussi très peu dans l’infrarouge.
   - Comme pour le N₂, son absorbance est très faible, donc il participe peu directement à l’effet de serre.
 </details>
 
 <details>
-<summary>- `Spectre_complet_gazs_et_terre.png` : graphique comparatif regroupant les spectres de plusieurs gaz et le **spectre d’émission terrestre**.</summary>
+<summary><code>- `Spectre_complet_gazs_et_terre.png` : graphique comparatif regroupant les spectres de plusieurs gaz et le **spectre d’émission terrestre**.</code></summary>
   - Il permet de comparer directement les bandes d’absorption de `H2O`, `CO2`, `CH4`, `N2`, `O2` et `O3`.
   - La courbe rouge représente le **spectre d’émission de la Terre**, approximé pour une température d’environ `287 K`.
   - Ce fichier permet de voir quels gaz absorbent dans les zones où la Terre émet le plus d’énergie infrarouge.
@@ -78,7 +78,7 @@ Ces paramètres permettent de comparer les gaz dans des conditions identiques.
 </details>
 
 <details>
-<summary>### Utilité du dossier dans le projet</summary>
+<summary> Utilité du dossier dans le projet</summary>
 
 Le dossier `SpectreHitran` permet de relier les propriétés spectrales des gaz à leur rôle climatique.
 
