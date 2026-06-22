@@ -10,9 +10,9 @@ Récapitulatif du dossier `Codes`
 
 - Permet de calculer le **bilan de puissance radiative** de l'atmosphère en évaluant les échanges d'énergie et les flux thermiques.
 
-## Programme __code_atmosphere_T_et_P.py__
+## Programme __code_atmosphere_T_et_P__
 
-- Permet de calculer la **température** et la **pression** de l'atmosphère en fonction de l'altitude, à partir du modèle d'atmosphère **ISA**.
+- Permet de calculer la **température** et la **pression** de l'atmosphère en fonction de l'altitude, en se basant sur le modèle d'atmosphère standard **ISA**.
 
 ## Programme __effet_de_serre_ebauche.py__
 
