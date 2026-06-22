@@ -43,33 +43,14 @@
 \newpage
 
 % =============================================================
-\section{Prérequis et installation}
-% =============================================================
 
-Avant d'exécuter le programme pour la première fois, il est
-nécessaire d'installer les bibliothèques Python requises.
 
-\medskip
-
-Pour cela, exécuter le script \texttt{install\_hapi.py}. Cette étape n'est à réaliser
-\textbf{qu'une seule fois}.
-
-\newpage
 
 % =============================================================
-\section{Entrées du programme}
+
 % =============================================================
 
-L'utilisateur fournit en entrée :
 
-\begin{itemize}
-    \item le \textbf{gaz} étudié parmi :
-          CO$_2$, H$_2$O, O$_3$, N$_2$O, CH$_4$, O$_2$,
-    \item l'\textbf{altitude minimale} $z_{\min}$ en mètres,
-    \item l'\textbf{altitude maximale} $z_{\max}$ en mètres.
-\end{itemize}
-Ensuite le code calcul l'épaisseur optique sur l'intervalle [$z_{\min}$,$z_{\max}$].
-\newpage
 
 % =============================================================
 \section{Épaisseur optique}
@@ -101,7 +82,7 @@ où :
 Les sections suivantes expliquent comment $\sigma(\lambda)$
 et $\mathcal{N}$ sont calculés.
 
-\newpage
+
 
 % =============================================================
 \section{Colonne moléculaire $\mathcal{N}$}
@@ -144,7 +125,7 @@ $1\ \text{m}^2$, entre $z_{\min}$ et $z_{\max}$ :
     }
 \end{equation}
 
-\newpage
+
 
 % =============================================================
 \section{Section efficace $\sigma(\lambda)$}
@@ -162,29 +143,9 @@ Elle est exprimée en m$^2\cdot$molécule$^{-1}$ et représente
 la probabilité qu'une molécule absorbe un photon
 à la longueur d'onde $\lambda$.
 
-\medskip
 
-Les bandes spectrales utilisées pour chaque gaz sont :
 
-\begin{table}[h!]
-\centering
-\renewcommand{\arraystretch}{1.4}
-\begin{tabular}{lcc}
-    \toprule
-    \textbf{Gaz} & \textbf{Bande (cm$^{-1}$)} & \textbf{Longueur d'onde d'absorbance max} \\
-    \midrule
-    CO$_2$ & 600 -- 750   & $\sim 15\ \mu$m \\
-    H$_2$O & 200 -- 800   & $12{,}5 - 50\ \mu$m \\
-    O$_3$  & 980 -- 1100  & $\sim 9{,}6\ \mu$m \\
-    N$_2$O & 500 -- 800   & $\sim 17\ \mu$m \\
-    CH$_4$ & 1200 -- 1400 & $\sim 7{,}7\ \mu$m \\
-    O$_2$  & 7500 -- 8000 & $\sim 1{,}27\ \mu$m \\
-    \bottomrule
-\end{tabular}
-\caption{Bandes spectrales utilisées pour chaque gaz.}
-\end{table}
 
-\newpage
 
 % =============================================================
 \section{Calcul final}
@@ -268,31 +229,7 @@ cette même transmittance moyenne :
 \end{table}
 
 % =============================================================
-\section{Résumé}
-% =============================================================
 
-\begin{center}
-\renewcommand{\arraystretch}{2.2}
-\begin{tabular}{c}
-   
-    \textbf{Entrées} : gaz, $z_{\min}$, $z_{\max}$ \\
-    
-    $\downarrow$ \\
-    $x_i(z)$ via \texttt{atmosphere\_isotherme.py},
-    $T(z)$ et $P(z)$ calculés par le programme \\
-    $\downarrow$ \\
-    $n_i(z) = \frac{x_i(z)\,P(z)\,}{\,k_B\,T(z)}$ \\
-    $\downarrow$ \\
-    $\mathcal{N} = \displaystyle\int_{z_{\min}}^{z_{\max}} n_i(z)\,\mathrm{d}z$ \\
-    $\downarrow$ \\
-    $\sigma(\lambda)$ via HITRAN \\
-    $\downarrow$ \\
-    $\tau(\lambda) = \sigma(\lambda) \times \mathcal{N}$ \\
-    $\downarrow$ \\
-    $\tau_{\text{eff}} = -\ln(\bar{\mathcal{T}})$ \\
-    
-\end{tabular}
-\end{center}
 
 % =============================================================
 \section{Sources}
