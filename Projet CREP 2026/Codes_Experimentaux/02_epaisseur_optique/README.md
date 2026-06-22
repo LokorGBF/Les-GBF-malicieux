@@ -20,11 +20,7 @@ Avant d'exécuter le script `calcul_epaisseur_optique_final.py`, veuillez respec
 
 - Permet de calculer **l'épaisseur optique** en fonction des gaz, de l'épaisseur de la couche atmosphérique et de la longueur d'onde.
 
----
-
-# Fichier README du modèle atmosphérique
 
 ## Programme __atmosphere_isotherme__
 
-- Permet de calculer la **fraction molaire**, la **pression partielle** et la **concentration** d'un gaz en fonction de l'altitude, à partir d'un modèle d'atmosphère isotherme.
-  
+- Permet de calculer la **fraction molaire**, la **pression partielle** et la **concentration** d'un gaz en fonction de l'altitude, à partir d'un modèle d'atmosphère isotherme
