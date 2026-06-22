@@ -43,4 +43,4 @@ Chaque fichier correspond à une partie précise du modèle : données, grille t
 
 ## Dossier `__pycache__`
 
-- `__pycache__` : dossier généré automatiquement par Python lors de l’exécution du code ; il ne fait pas partie du code source principal et peut être ignoré dans le suivi du projet
+- `__pycache__` : dossier généré automatiquement par Python lors de l’exécution du code, il ne fait pas partie du code source principal.
