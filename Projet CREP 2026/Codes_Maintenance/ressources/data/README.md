@@ -1,24 +1,10 @@
 # Fichier README des ressources
 
-Récapitulatif du dossier `ressources`
+Récapitulatif du dossier `data`
 
-## Dossier _Cp_humidity_
+## Dossier __data__
 
-- `average_rzsm_tout.csv` : **découpe la Terre en petites surfaces** de 0,25° de latitude et de longitude et y associe une **valeur de l'humidité**
-- `ZZ_cp.py` : calcule la valeur de la **capacité thermique du sol** en fonction de la valeur de l'humidité
-
-## Dossier _albedo_
-
-- contient l'ensemble des **valeurs d'albedo terrestre** en fonction de la **position**
-
-## Dossier _data_
-
-- contient les fichiers permettant de **délimiter les continents**
-
-## Dossier _map_
-
-- contient les fichiers permettant d'obtenir le **nom du continent** et sa **constante de chaleur latente** associée en fonction des **coordonées de position**
-
-## Dossier _npy_
-
-- contient les 4 fichiers pour les planisphères et les sphères, en low res et high res, avec 1 ou 2 ans de simulation
+- `ne_10m_coastline.shp`, `ne_10m_coastline.dbf` et `ne_10m_coastline.shx` : ensemble de fichiers cartographiques (format Shapefile) permettant de **délimiter les côtes et les continents** sur nos modélisations. Ces fichiers sont interdépendants :
+  - `.shp` : stocke la **géométrie** exacte (les coordonnées GPS des tracés côtiers de la Terre).
+  - `.dbf` : stocke les **attributs et données** associés sous forme de base de données.
+  - `.shx` : sert d'**index** pour faire le lien rapidement entre la géométrie et la base de données lors de l'exécution du code.
