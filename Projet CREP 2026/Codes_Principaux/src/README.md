@@ -3,7 +3,6 @@
 Récapitulatif du dossier `src`
 
 Ce dossier contient l'ensemble des **fichiers sources principaux** utilisés pour faire fonctionner le modèle climatique.  
-Chaque fichier correspond à une partie précise du modèle : données, grille terrestre, flux solaire, albédo, effet de serre, bilan d’énergie, évolution de la température ou affichage des résultats.
 
 ## Fichiers du dossier `src`
 
