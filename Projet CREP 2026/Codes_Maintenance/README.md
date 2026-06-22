@@ -6,7 +6,7 @@ Récapitulatif du dossier `Codes_Principaux`
 
 - contient les **données nécessaires au fonctionnement du modèle** (valeurs d’albédo, humidité, cartes géographiques).
 
-## Dossier _results_
+## Dossier _results/figures_
 
 - contient les **résultats générés** par la simulation : figure, carte, fichier de température produit lors de l’exécution du modèle.
 
