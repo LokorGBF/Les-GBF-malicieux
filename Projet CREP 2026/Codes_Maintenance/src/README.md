@@ -38,6 +38,3 @@ Ce dossier contient l'ensemble des **fichiers sources principaux** utilisés pou
 
 - `time_solar.py` : calcule les **paramètres solaires temporels**, comme le jour de l’année, l’heure solaire locale, la déclinaison solaire et l’angle d’incidence du Soleil.
 
-## Dossier `__pycache__`
-
-- `__pycache__` : dossier généré automatiquement par Python lors de l’exécution du code, il ne fait pas partie du code source principal.
