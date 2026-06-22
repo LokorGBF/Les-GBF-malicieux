@@ -202,12 +202,12 @@ def simulate_radiative_transfer(CO2_fraction, z_max = 80000, delta_z = 10, lambd
 # MAIN : ÉVOLUTION DU FLUX REÇU AU SOL EN FONCTION DE LA CONCENTRATION EN CO2
 # ======================================================================================================================
 
-#  Configuration des paramètres physiques de base
+""" #  Configuration des paramètres physiques de base
 CO2_fraction = 280e-6            # Concentration de référence en CO2 (280 ppm = ère préindustrielle)
 puissance_recu_soleil = 1361 / 4 # Flux solaire moyen absorbé par unité de surface sur la sphère terrestre (W/m²)
 
 # Définition des scénarios climatiques (facteurs multiplicateurs de la concentration de base)
-factors = np.arange(0.5, 2, 0.5)
+factors = np.arange(0.5, 2.5, 0.5)
 flux_sol_selon_frCO2 = []        # Liste pour accumuler le contre-rayonnement infrarouge reçu au sol
 
 #  Boucle de simulation du transfert radiatif
@@ -231,12 +231,79 @@ flux_sol_selon_frCO2 = np.array(flux_sol_selon_frCO2)
 flux_total_sol = flux_sol_selon_frCO2 + puissance_recu_soleil
 
 # Tracé de la courbe finale (Conversion de la fraction de CO2 en ppm sur l'axe X)
-plt.plot(factors * CO2_fraction * 1e6, flux_total_sol)
+plt.plot(factors * CO2_fraction * 1e6, flux_total_sol,"o")
 plt.xlabel("CO₂ (ppm)")
 plt.ylabel("Flux reçu par le sol (W/m²)")
 plt.title("Impact de la concentration en CO₂ sur le flux total absorbé au sol")
 plt.grid(True)
 
 # Affichage de la fenêtre graphique
-plt.show()
+plt.show() """
 # ----------------------------------------------------------------------------------------------------------------------
+
+
+
+
+# ======================================================================================================================
+# MAIN : ÉVOLUTION DU FLUX REÇU AU SOL AVEC DOUBLE ÉCHELLE (FLUX TOTAL & ANOMALIE)
+# ======================================================================================================================
+
+# 1. Configuration des paramètres physiques de base
+CO2_fraction = 280e-6      # Concentration de référence en CO2 (280 ppm = ère préindustrielle)      
+puissance_recu_soleil = 1361 / 4 # Flux solaire moyen absorbé par unité de surface sur la sphère terrestre (W/m²)
+
+# Échantillonnage (on s'assure que 1.0 est bien dans la liste pour avoir les 280 ppm)
+factors_bruts= np.arange(0.5, 2.1, 0.5) # permet de mettre n'importe quel pas et ou de valeurs min et max même si il n'y a pas la valeur de ref 280ppm
+factors = np.unique(np.append(factors_bruts, 1.0)) #range dans l'ordre croissant et on s'assure que la valeur 1 existe pour avoir notre valeur ref 280ppm
+flux_sol_selon_frCO2 = []      # Liste pour accumuler le contre-rayonnement infrarouge reçu au sol  
+
+#  Boucle de simulation du transfert radiatif
+for factor in factors:
+    # Calcul de la concentration actuelle pour cette itération
+    current_CO2 = CO2_fraction * factor
+
+    # Exécution du modèle (calcul des flux montants et descendants dans l'atmosphère)
+    lambda_range, z_range, upward_flux, downward_flux, optical_thickness = simulate_radiative_transfer(current_CO2)
+    delta_lambda = lambda_range[1] - lambda_range[0]  # Conservé si modification future de la grille spectrale
+
+    # Extraction du flux infrarouge descendant qui atteint le SOL (altitude z = 0, d'où l'indice 0)
+    # On somme l'énergie sur l'ensemble du spectre des longueurs d'onde
+    flux_sol_selon_frCO2.append(downward_flux[0, :].sum()) 
+
+# Conversion en tableau NumPy pour permettre les opérations mathématiques directes
+flux_sol_selon_frCO2 = np.array(flux_sol_selon_frCO2)
+
+# Calcul des flux et de la valeur de référence
+flux_total_sol = flux_sol_selon_frCO2 + puissance_recu_soleil
+
+# --- CALCUL DE LA RÉFÉRENCE À 280 PPM ---
+# On trouve l'indice où le facteur est le plus proche de 1.0 (soit 280 ppm)
+idx_280 = np.argmin(np.abs(factors - 1.0))
+flux_ref_280 = flux_total_sol[idx_280] # on récupere spécifiquement la valeur du flux à 280 ppm
+
+
+#  Construction du graphique avec double axe
+fig, ax1 = plt.subplots(figsize=(10, 6))
+
+# Tracé sur l'axe principal (Axe de gauche : Valeur absolue)
+ax1.plot(factors * CO2_fraction * 1e6, flux_total_sol, 'o', color='tab:red', label='Flux total au sol')
+ax1.set_xlabel("CO₂ (ppm)")
+ax1.set_ylabel("Flux total reçu par le sol (W/m²)")
+ax1.tick_params(axis='y')
+ax1.grid(True)
+
+# Création de l'axe secondaire (Axe de droite : Différence / Anomalie)
+# 'forward' définit le passage de la valeur absolue à la différence (Soustraction)
+# 'inverse' fait l'opération inverse (Addition) pour que Matplotlib s'y retrouve
+forward = lambda x: x - flux_ref_280
+inverse = lambda x: x + flux_ref_280
+
+secax = ax1.secondary_yaxis('right', functions=(forward, inverse))
+secax.set_ylabel("Différence de flux par rapport à 280 ppm (W/m²)")
+secax.tick_params(axis='y')
+
+# Ajout d'une ligne horizontale en pointillés pour bien visualiser le "0" de la différence (valeur du flux conrrespondant à 280ppm)
+ax1.axhline(flux_ref_280, color='gray', linestyle='--', alpha=0.7)
+
+plt.title("Impact du CO₂ sur le flux reçu au sol (et écart par rapport à l'ère préindustrielle)")
+plt.show()
