@@ -1,7 +1,5 @@
 # Fichier README du dossier `src`
 
-Récapitulatif du dossier `src`
-
 Ce dossier contient l'ensemble des **fichiers sources principaux** utilisés pour faire fonctionner le modèle climatique.  
 
 ## Fichiers du dossier `src`
