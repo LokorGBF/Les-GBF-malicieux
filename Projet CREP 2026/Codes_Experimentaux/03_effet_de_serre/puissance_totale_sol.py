@@ -157,7 +157,7 @@ def simulate_radiative_transfer(CO2_fraction, z_max = 80000, delta_z = 10, lambd
 
     # Boundary condition : surface flux (corps noir, epsilon = 1) for all wavelengths
     earth_flux = np.pi * planck_function(lambda_range, temperature(0)) * delta_lambda
-    print(f"Total earth surface flux in wavelength range: {earth_flux.sum():.2f} W/m^2")
+  
 
     # -------- PASSE MONTANTE : surface -> sommet --------
     flux_in = earth_flux
@@ -176,7 +176,7 @@ def simulate_radiative_transfer(CO2_fraction, z_max = 80000, delta_z = 10, lambd
 
         flux_in = upward_flux[i, :]
 
-    print(f"Total outgoing flux at the top of the atmosphere: {upward_flux[-1, :].sum():.2f} W/m^2")
+    
 
     # -------- PASSE DESCENDANTE : sommet -> surface --------
     # Pas de rayonnement IR entrant depuis l'espace
@@ -192,80 +192,31 @@ def simulate_radiative_transfer(CO2_fraction, z_max = 80000, delta_z = 10, lambd
 
         flux_in = downward_flux[i, :]
 
-    print(f"Total downwelling flux at the surface (contre-rayonnement): {downward_flux[0, :].sum():.2f} W/m^2")
+ 
 
     return lambda_range, z_range, upward_flux, downward_flux, optical_thickness
 
 # ----------------------------------------------------------------------------------------------------------------------
 
 # MAIN
-## Nouvelle fonction pour l'effet de serre 
-
-puissance_recu_soleil= 1361/4 # on concidere que dans l'atmosphère il n'y a pas d'aréosols et seulement des gazs à effet de serre qui n'absorbent que dans le visible.
+## Nouvelle fonction pour l'effet de serre: elle renvoit l'évolution du flux réçu par le sol selon la concentration de CO2 dans l'atmosphère
+# on concidere que dans l'atmosphère il n'y a pas d'aréosols et seulement des gazs à effet de serre qui n'absorbent que dans le visible.
+# On integre les valeurs de flux descendant pour chaque concentration
+CO2_fraction = 280e-6
+puissance_recu_soleil= 1361/4 
 CO2_fraction = 280e-6
 factors= np.arange(0.5,2,0.5)
-flux_TOA_selon_frCO2= []
+flux_sol_selon_frCO2= []
 for factor in factors:# voir la valeur de début d'itératiion selon des valeurs réalistes de ppm de CO2
     current_CO2 = CO2_fraction*factor
     lambda_range, z_range, upward_flux, downward_flux, optical_thickness = simulate_radiative_transfer(current_CO2)
-    delta_lambda = lambda_range[1] - lambda_range[0] # a voir l'utilité car c tjrs la meme chose
-    flux_TOA_selon_frCO2.append( downward_flux[0, :].sum())  #TOA=TOp of atmosphere 
-flux_TOA_selon_frCO2=np.array(flux_TOA_selon_frCO2)
-plt.plot(factors*CO2_fraction*1e6,(flux_TOA_selon_frCO2+puissance_recu_soleil))
+    delta_lambda = lambda_range[1] - lambda_range[0] # utilse seulement si on change l'échelle des lambdas
+    flux_sol_selon_frCO2.append( downward_flux[0, :].sum())  
+flux_sol_selon_frCO2=np.array(flux_sol_selon_frCO2)
+plt.plot(factors*CO2_fraction*1e6,(flux_sol_selon_frCO2+puissance_recu_soleil))
 plt.xlabel("CO₂ (ppm)")
 plt.ylabel("Flux recu par le sol (W/m²)")
 plt.grid(True)
-# lambda_range, z_range, upward_flux2, downward_flux2, optical_thickness2 = simulate_radiative_transfer(CO2_fraction)
-
-# delta_lambda = lambda_range[1] - lambda_range[0]
-
-
-
-
-
-
-
-
-
-
-
-
-# # === Spectre au sommet de l'atmosphère (flux MONTANT) ===
-# plt.figure(figsize=(14, 9))
-# # Corps noir à la température de surface et à 216 K (haute atmosphère)
-# plt.plot(1e6 * lambda_range, np.pi * planck_function(lambda_range, temperature(0)) / 1e6, '--k')
-# plt.plot(1e6 * lambda_range, np.pi * planck_function(lambda_range, 216) / 1e6, '--k')
-
-# plt.plot(1e6 * lambda_range, upward_flux[-1, :]  / delta_lambda / 1e6, '-g', label='280 ppm')
-# plt.plot(1e6 * lambda_range, upward_flux2[-1, :] / delta_lambda / 1e6, '-r', label='560 ppm')# à changer
-# plt.fill_between(1e6 * lambda_range,
-#                  upward_flux[-1, :]  / delta_lambda / 1e6,
-#                  upward_flux2[-1, :] / delta_lambda / 1e6,
-#                  color='yellow', alpha=0.9)
-# plt.xlabel("Longueur d'onde (μm)")
-# plt.ylabel("Luminance spectrale (W/m²/μm/sr)")
-# plt.title("Flux montant au sommet de l'atmosphère")
-# plt.xlim(0, 50)
-# plt.ylim(0, 30)
-# plt.legend()
-# plt.grid(True)
-
-# # === Contre-rayonnement atmosphérique au sol (flux DESCENDANT) - nouveau ===
-# plt.figure(figsize=(14, 9))
-# plt.plot(1e6 * lambda_range, np.pi * planck_function(lambda_range, temperature(0)) / 1e6, '--k')
-# plt.plot(1e6 * lambda_range, downward_flux[0, :]  / delta_lambda / 1e6, '-g', label='280 ppm')
-# plt.plot(1e6 * lambda_range, downward_flux2[0, :] / delta_lambda / 1e6, '-r', label='560 ppm') # POIUR LA L2GENDE à changer
-# plt.fill_between(1e6 * lambda_range,
-#                  downward_flux[0, :]  / delta_lambda / 1e6,
-#                  downward_flux2[0, :] / delta_lambda / 1e6,
-#                  color='yellow', alpha=0.9)
-# plt.xlabel("Longueur d'onde (μm)")
-# plt.ylabel("Luminance spectrale (W/m²/μm/sr)")
-# plt.title("Contre-rayonnement atmosphérique reçu au sol")
-# plt.xlim(0, 50)
-# plt.ylim(0, 30)
-# plt.legend()
-# plt.grid(True)
 
 plt.show()
 # ----------------------------------------------------------------------------------------------------------------------
