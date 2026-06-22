@@ -1,18 +1,23 @@
-# Fichier README des ressources
+<details>
+<summary># Fichier README des ressources</summary>
 
-Récapitulatif du dossier `ressources`.
+Récapitulatif du dossier `ressources`:
 
 Ce dossier regroupe les fichiers nécessaires aux différents modèles utilisés dans le projet : humidité du sol ("Cp_humidity"), albédo ("albedo"), découpage géographique, constantes associées aux continents, données pré-calculées, ainsi que les spectres d’absorption des gaz atmosphériques.
+</details>
 
-## Dossier _SpectreHitran_
+<details>
+<summary>## Dossier _SpectreHitran_</summary> 
 
 Ce dossier contient les **spectres d’absorption infrarouge** de plusieurs gaz atmosphériques, générés à partir de la base de données **HITRAN** et affichés sous forme de graphiques.
 
 Les graphiques montrent l’**absorbance** en fonction de la **fréquence** exprimée en `cm⁻¹`. L’axe du haut indique aussi la longueur d’onde correspondante en `µm`.
 
 Ces fichiers servent à identifier les zones du rayonnement infrarouge terrestre qui sont absorbées par les différents gaz de l’atmosphère. Ils sont utiles pour étudier l’effet de serre, car la Terre émet principalement dans l’infrarouge.
+</details>
 
-### Paramètres utilisés dans les spectres individuels
+<details>
+<summary>### Paramètres utilisés dans les spectres individuels</summary>
 
 Pour les spectres individuels :
 
@@ -22,39 +27,58 @@ Pour les spectres individuels :
 - longueur du trajet optique : `L = 1 cm`
 
 Ces paramètres permettent de comparer les gaz dans des conditions identiques.
+</details>
 
-### Fichiers du dossier
+<details>
+<summary>### Fichiers du dossier</summary>
 
-- `spectraplot_H2O.png` : spectre d’absorption de la **vapeur d’eau**.
-  - La vapeur d’eau absorbe fortement dans certaines zones de l’infrarouge, notamment aux faibles fréquences du graphique.
-  - C’est un gaz très important dans l’effet de serre, car son absorption est large et intense.
+  <details>
+  <summary>- `spectraplot_H2O.png` : spectre d’absorption de la **vapeur d’eau**.</summary>
+    - La vapeur d’eau absorbe fortement dans certaines zones de l’infrarouge, notamment aux faibles fréquences du graphique.
+    - C’est un gaz très important dans l’effet de serre, car son absorption est large et intense.
+  </details>
 
-- `spectraplot_CO2.png` : spectre d’absorption du **dioxyde de carbone**.
-  - Le CO₂ présente une bande d’absorption importante autour de `650–700 cm⁻¹`, correspondant à une longueur d’onde proche de `15 µm`.
-  - Cette zone est très importante car elle se situe dans le domaine d’émission infrarouge de la Terre.
+  <details>
+  <summary>- `spectraplot_CO2.png` : spectre d’absorption du **dioxyde de carbone**.</summary>
+    - Le CO₂ présente une bande d’absorption importante autour de `650–700 cm⁻¹`, correspondant à une longueur d’onde proche de `15 µm`.
+    - Cette zone est très importante car elle se situe dans le domaine d’émission infrarouge de la Terre.
+  </details>
 
-- `spectraplot_CH4.png` : spectre d’absorption du **méthane**.
-  - Le CH₄ absorbe principalement autour de `1200–1400 cm⁻¹`, soit environ `7–8 µm`.
-  - Même s’il est moins abondant que le CO₂, il absorbe fortement dans certaines bandes précises.
+  <details>
+  <summary>- `spectraplot_CH4.png` : spectre d’absorption du **méthane**.</summary>
+    - Le CH₄ absorbe principalement autour de `1200–1400 cm⁻¹`, soit environ `7–8 µm`.
+    - Même s’il est moins abondant que le CO₂, il absorbe fortement dans certaines bandes précises.
+  </details>
 
-- `spectraplot_O3.png` : spectre d’absorption de l’**ozone**.
-  - L’ozone possède une bande d’absorption marquée autour de `1000–1100 cm⁻¹`, soit environ `9–10 µm`.
-  - Cette zone se trouve dans la fenêtre infrarouge atmosphérique, donc l’ozone peut influencer la sortie du rayonnement terrestre vers l’espace.
+  <details>
+  <summary>- `spectraplot_O3.png` : spectre d’absorption de l’**ozone**.</summary>
+    - L’ozone possède une bande d’absorption marquée autour de `1000–1100 cm⁻¹`, soit environ `9–10 µm`.
+    - Cette zone se trouve dans la fenêtre infrarouge atmosphérique, donc l’ozone peut influencer la sortie du rayonnement terrestre vers l’espace.
+  </details>
 
-- `spectraplot_N2.png` : spectre d’absorption du **diazote**.
-  - Le N₂ absorbe très peu dans l’infrarouge.
-  - L’échelle d’absorbance est extrêmement faible, ce qui montre que le diazote contribue très peu directement à l’effet de serre.
+  <details>
+  <summary>- `spectraplot_N2.png` : spectre d’absorption du **diazote**.</summary>
+    - Le N₂ absorbe très peu dans l’infrarouge.
+    - L’échelle d’absorbance est extrêmement faible, ce qui montre que le diazote contribue très peu directement à l’effet de serre.
+  </details>
 
-- `spectraplot_O2.png` : spectre d’absorption du **dioxygène**.
+<details>
+<summary>- `spectraplot_O2.png` : spectre d’absorption du **dioxygène**.</summary>
   - Le O₂ absorbe aussi très peu dans l’infrarouge.
   - Comme pour le N₂, son absorbance est très faible, donc il participe peu directement à l’effet de serre.
+</details>
 
-- `Spectre_complet_gazs_et_terre.png` : graphique comparatif regroupant les spectres de plusieurs gaz et le **spectre d’émission terrestre**.
+<details>
+<summary>- `Spectre_complet_gazs_et_terre.png` : graphique comparatif regroupant les spectres de plusieurs gaz et le **spectre d’émission terrestre**.</summary>
   - Il permet de comparer directement les bandes d’absorption de `H2O`, `CO2`, `CH4`, `N2`, `O2` et `O3`.
   - La courbe rouge représente le **spectre d’émission de la Terre**, approximé pour une température d’environ `287 K`.
   - Ce fichier permet de voir quels gaz absorbent dans les zones où la Terre émet le plus d’énergie infrarouge.
+</details>
 
-### Utilité du dossier dans le projet
+</details>
+
+<details>
+<summary>### Utilité du dossier dans le projet</summary>
 
 Le dossier `SpectreHitran` permet de relier les propriétés spectrales des gaz à leur rôle climatique.
 
@@ -67,9 +91,4 @@ Il sert notamment à :
 - montrer que `N2` et `O2`, bien que très abondants dans l’atmosphère, absorbent très peu directement dans l’infrarouge.
 
 ---
-
-## Fichiers
-
-### Rapport
-
-- `données sourcées.pdf` : fichier qui regroupe des données utiles pour les modèles.
+</details>
