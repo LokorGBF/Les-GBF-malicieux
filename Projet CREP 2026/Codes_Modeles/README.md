@@ -48,24 +48,6 @@ Plus l’épaisseur optique est élevée, plus la couche atmosphérique absorbe 
 ---
 
 <details>
-<summary>Prérequis importants</summary>
-
-Avant d’exécuter le script `calcul_epaisseur_optique_final.py`, il faut respecter les consignes suivantes :
-
-- exécuter au moins une fois le fichier `installation_hapi.py` ;
-- vérifier que le fichier `atmosphere_isotherme.py` est bien dans le même dossier ;
-- utiliser une version compatible de NumPy.
-
-Pour installer une ancienne version de NumPy compatible avec le code, utiliser la commande suivante :
-
-"```bash"
-"pip install numpy<2.0"
-
-</details>
-
----
-
-<details>
 <summary>03_effet_de_serre</summary>
 
 Ce dossier regroupe les programmes utilisés pour étudier l’effet de serre.
