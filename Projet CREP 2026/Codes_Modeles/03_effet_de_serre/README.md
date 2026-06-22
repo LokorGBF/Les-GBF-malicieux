@@ -1,32 +1,15 @@
-\# Fichier README de l'effet de serre
+# Fichier README de l'effet de serre
 
+Récapitulatif du dossier `03_effet_de_serre`
 
+## Programme __code_atmosphere_T_et_P__
 
-Récapitulatif du dossier 03\_effet\_de\_serre
+- Permet de calculer la **température** et la **pression** de l'atmosphère en fonction de l'altitude, à partir du modèle d'atmosphère **ISA**.
 
+## Programme __effet_de_serre_ebauche__
 
+- Permet de dessiner le **flux émis par l'atmosphère** en fonction de la fraction molaire du **CO₂**.
 
-\## Programme code\_atmosphere\_T\_et\_P
+## Programme __puissance_totale_sol__
 
-
-
-\-Permet de donner la température et la pression de l'atmosphère en fonction de l'altitude à partir du modèle d'atmosphère ISA
-
-
-
-\## Programme effet\_de\_serre\_ebauche
-
-
-
-\-Permet de dessiner le flux émis par l'atmosphère en fonction de la fraction molaire du CO2
-
-
-
-\## Programme puissance\_totale\_sol
-
-
-
-\-Permet de dessiner le flux reçu par le sol en fonction de la fraction molaire du CO2
-
-
-
+- Permet de dessiner le **flux reçu par le sol** en fonction de la fraction molaire du **CO₂**.
