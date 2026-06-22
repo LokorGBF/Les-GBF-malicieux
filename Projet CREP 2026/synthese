@@ -8,6 +8,9 @@
 \usepackage{graphicx} % Pour le logo
 \usepackage{geometry} % Pour les marges
 \geometry{hmargin=2.5cm,vmargin=2.5cm}
+\definecolor{bleupale}{RGB}{70,130,180}
+\usepackage{xcolor}
+\usepackage{fancyvrb}
 
 \begin{document}
 % --- Début de la page de garde ---
@@ -143,6 +146,161 @@ Les simulations montrent que :
 \end{itemize}
 
 Le modèle isotherme constitue donc une bonne approximation aux faibles altitudes.
+
+\section{Appropriation et maintenance des modèles existants}
+
+
+Le premier objectif du projet consistait à s'approprier les modèles dynamiques déjà existants de température de surface, notée $T_{\text{surf}}(\vec{r},t)$, afin de construire un nouveau code plus complet et plus facilement réutilisable. 
+
+
+\subsubsection{Reprise du fonctionnement général dans \texttt{main.py}}
+
+Le fichier \texttt{main.py} a été créé comme point d'entrée du modèle. Son rôle est de lancer la simulation et d'appeler les différentes fonctions nécessaires au calcul de la température de surface.
+
+\vspace{1\baselineskip}
+
+Nous l'avons implémenté afin qu'il serve principalement à :
+\begin{itemize}
+    \item[-] Initialiser la grille terrestre 
+    \item[-] Charger les paramètres de simulation 
+    \item[-] Appeler les différents modules physiques 
+    \item[-] Lancer l'évolution temporelle de la température 
+    \item[-] Sauvegarder et afficher les résultats obtenus
+\end{itemize}
+
+\vspace{1\baselineskip}
+
+L'idée a été d'éviter que \texttt{main.py} contienne directement tous les calculs physiques. Il joue plutôt le rôle de fichier de coordination entre les différentes parties du modèle.
+
+\subsubsection{Séparation des calculs physiques dans \texttt{src}}
+
+Nous avons donc réorganisé les calculs dans le dossier \texttt{src}, en associant chaque fichier à une fonction précise du modèle.
+
+\vspace{0.5\baselineskip}
+
+Par exemple, le flux solaire, l'albédo, les nuages, le rayonnement infrarouge, l'effet de serre, l'évaporation, la capacité thermique et le bilan d'énergie sont traités dans des modules séparés. 
+
+\vspace{1\baselineskip}
+
+Le modèle final repose sur un bilan d'énergie de la forme :
+\[
+P_{\text{net}}(\vec{r},t)
+=
+P_{\text{sol}}(\vec{r},t)
++
+P_{\text{serre}}(\vec{r},t)
+-
+P_{\text{IR,surface}}(\vec{r},t)
+-
+P_{\text{evap}}(\vec{r},t)
+-
+P_{\text{conv}}(\vec{r},t).
+\]
+
+\[
+C(\vec{r}) \frac{\partial T_{\text{surf}}(\vec{r},t)}{\partial t}
+=
+P_{\text{net}}(\vec{r},t).
+\]
+
+\vspace{1\baselineskip}
+
+\textbf{Remarque :} L'influence de la conducto-convection (intéraction sol-atmosphère) et de la convection (intéraction entre les différentes couches de l'atmosphère et intéraction entre les couches voisines) n'a pas été implémenté. 
+
+\vspace{0.5\baselineskip}
+
+Chaque terme est calculé dans un module spécifique avant d'être regroupé dans le bilan final. Cela rend le modèle plus lisible et permet de modifier un phénomène physique sans devoir réécrire l'ensemble du code.
+
+\subsubsection{Boucle temporelle de mise à jour de la température}
+
+Une fois le bilan de puissance surfacique calculé, le modèle fait évoluer la température de surface au cours du temps. Pour cela, on utilise une boucle temporelle : à chaque pas de temps, on calcule la puissance nette reçue par chaque point de la grille, puis on met à jour la température.
+
+\vspace{0.5\baselineskip}
+
+La mise à jour de la température est réalisée à partir de la relation suivante :
+
+\[
+T_{n+1} = T_n + \frac{\Delta t \, P_{\text{net}}}{C}
+\]
+
+\vspace{0.5\baselineskip}
+
+Avec :
+\begin{itemize}
+    \item[-] \(T_n\) : température de surface à l'instant actuel
+    \item[-] \(T_{n+1}\) : température au pas de temps suivant
+    \item[-] \(P_{\text{net}}\) : puissance surfacique nette reçue par la surface en \(\text{W}\cdot\text{m}^{-2}\) 
+    \item[-] \(C\) : capacité thermique surfacique du sol en \(\text{J}\cdot\text{m}^{-2}\cdot\text{K}^{-1}\)
+\end{itemize}
+
+\vspace{0.5\baselineskip}
+
+Cette relation vient du bilan d'énergie :
+
+\[
+C \frac{\partial T}{\partial t} = P_{\text{net}}
+\]
+
+\vspace{0.5\baselineskip}
+
+En discrétisant cette équation dans le temps, on obtient :
+
+\[
+C \frac{T_{n+1} - T_n}{\Delta t} = P_{\text{net}}
+\]
+
+puis :
+
+\[
+T_{n+1} = T_n + \frac{\Delta t \, P_{\text{net}}}{C}
+\]
+
+
+\vspace{0.5\baselineskip}
+
+Cette boucle est appliquée à chaque cellule de la grille terrestre et répétée pendant toute la durée de la simulation. Elle permet donc de suivre l'évolution progressive de la température de surface en fonction des différents phénomènes physiques pris en compte dans le bilan d'énergie.
+
+
+\subsubsection{Mise en place d'options \texttt{True}/\texttt{False}}
+
+Un point important de la maintenance a été l'ajout d'un système d'options activables ou désactivables. Ces options sont définies avec des variables booléennes, qui peuvent valoir \texttt{True} ou \texttt{False}.
+
+\vspace{1\baselineskip}
+
+Dans le fichier \texttt{config.py} on retrouve : 
+
+\vspace{0.5\baselineskip}
+
+\begin{Verbatim}[formatcom=\color{bleupale}]
+OPTIONS = {
+    "solar": True,
+    "surface_albedo": True,
+    "cloud_albedo": True,
+    "surface_infrared": True,
+    "greenhouse": True,
+    "evaporation": True,
+    "heat_capacity": True,
+    "convection": False,
+    "co2": False,
+}
+\end{Verbatim}
+
+\vspace{0.5\baselineskip}
+
+Lorsque l'option vaut \texttt{True}, le modèle utilise le calcul ou les données associées. Lorsqu'elle vaut \texttt{False}, il utilise une version simplifiée, par exemple avec une valeur constante.
+
+\vspace{0.5\baselineskip}
+
+Ce système permet de tester séparément l'influence de plusieurs phénomènes physiques. On peut ainsi tester l'influence d'un seul paramètre, comme l'albédo variable ou la capacité thermique variable, sur l'évolution de la température.
+
+\subsubsection{Intérêt de la maintenance réalisée}
+
+Cette maintenance a permis de transformer les anciens codes en un modèle plus modulaire. Le fichier \texttt{main.py} coordonne la simulation, le dossier \texttt{src} contient les calculs physiques, et le dossier \texttt{ressources} fournit les données utilisées par ces calculs.
+
+\vspace{0.5\baselineskip}
+
+Le modèle obtenu est donc plus simple à comprendre, à tester et à modifier. Il constitue une base plus propre pour poursuivre le travail, notamment pour améliorer la modélisation de l'influence de l'atmosphère sur la puissance surfacique reçue par la surface terrestre.
+
 
 \end{document}
 
