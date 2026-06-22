@@ -10,7 +10,7 @@ Récapitulatif du dossier Codes\_Experimentaux
 
 
 
-
+\-Permet de créer des modèles d'atmosphère (ISA et isotherme) donnant la fonction et l'altitude 
 
 
 
@@ -18,7 +18,7 @@ Récapitulatif du dossier Codes\_Experimentaux
 
 
 
-
+\-Permet de calculer l'épaisseur optique
 
 
 
@@ -26,7 +26,7 @@ Récapitulatif du dossier Codes\_Experimentaux
 
 
 
-
+\-Permet de calculer les flux liés à l'effet de serre 
 
 
 
@@ -34,5 +34,5 @@ Récapitulatif du dossier Codes\_Experimentaux
 
 
 
-
+\-Permet de calculer l'effet du rayonnement solaire
 
