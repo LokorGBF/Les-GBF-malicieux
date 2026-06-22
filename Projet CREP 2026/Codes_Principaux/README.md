@@ -4,7 +4,7 @@ Récapitulatif du dossier `Codes_Principaux`
 
 ## Fichier _main.py_
 
-- lance la **simulation climatique principale**, crée la **grille terrestre**, appelle le modèle, sauvegarde les résultats et affiche le **planisphère** (température mondiale à la fin de la simulation) et une **courbe de température** pour une localisation donnée. Afin de modifier la latitude et longitude de l'emplacement pour la courbe de température, il suffit de les modifier ici : plot_temperature_curve(T_history, grid, lat_target=48.8566, lon_target=2.3522).
+- lance la **simulation climatique principale**, crée la **grille terrestre**, appelle le modèle, sauvegarde les résultats, affiche le **planisphère** (température mondiale à la fin de la simulation) et une **courbe de température** pour une localisation donnée. Afin de modifier la latitude et longitude de l'emplacement pour la courbe de température, il suffit de les modifier ici : plot_temperature_curve(T_history, grid, lat_target=48.8566, lon_target=2.3522).
 
 ## Fichier _bilan_puissance_spectral.py_
 
