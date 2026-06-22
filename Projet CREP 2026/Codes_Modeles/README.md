@@ -29,6 +29,8 @@ Il sert principalement à calculer les grandeurs atmosphériques fondamentales c
 
 Ces données sont ensuite réutilisées dans les autres parties du projet, notamment pour le calcul de l’épaisseur optique et l’étude de l’effet de serre.
 
+Lien du dossier : [01_modeles_atmospheriques](https://github.com/LokorGBF/Les-GBF-malicieux/tree/3742d777b5f92148e6c53d47bb28aec98df4d77b/Projet%20CREP%202026/Codes_Modeles/01_modeles_atmospheriques)
+
 </details>
 
 ---
@@ -43,6 +45,8 @@ Dans ce projet, elle sert à quantifier l’effet des gaz atmosphériques sur le
 
 Plus l’épaisseur optique est élevée, plus la couche atmosphérique absorbe fortement le rayonnement.
 
+Lien du dossier : [02_epaisseur_optique](https://github.com/LokorGBF/Les-GBF-malicieux/tree/7e27dbb43b41057143bd963219c6211b9c3bfa38/Projet%20CREP%202026/Codes_Modeles/02_epaisseur_optique)
+
 </details>
 
 ---
@@ -56,6 +60,8 @@ L’objectif est de comprendre comment certains gaz atmosphériques, en particul
 
 Ce dossier permet donc de faire le lien entre la composition atmosphérique et le bilan énergétique de la Terre.
 
+Lien du dossier : [03_effet_de_serre](https://github.com/LokorGBF/Les-GBF-malicieux/tree/208db6bba0fe43702ac687e9d79280f716990b89/Projet%20CREP%202026/Codes_Modeles/03_effet_de_serre)
+
 </details>
 
 ---
@@ -68,6 +74,8 @@ Ce dossier contient les programmes liés au rayonnement solaire.
 Il sert à modéliser l’énergie solaire reçue par la Terre et à étudier comment cette énergie est répartie, absorbée ou transmise dans le système Terre-atmosphère.
 
 Cette partie est complémentaire de l’étude de l’effet de serre : le rayonnement solaire correspond à l’énergie entrante, tandis que le rayonnement infrarouge terrestre correspond à une partie de l’énergie sortante.
+
+Lien du dossier : [04_rayonnement_solaire](https://github.com/LokorGBF/Les-GBF-malicieux/tree/208db6bba0fe43702ac687e9d79280f716990b89/Projet%20CREP%202026/Codes_Modeles/04_rayonnement_solaire)
 
 </details>
 
