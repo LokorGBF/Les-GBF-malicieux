@@ -43,6 +43,10 @@ Dans ce projet, elle sert à quantifier l’effet des gaz atmosphériques sur le
 
 Plus l’épaisseur optique est élevée, plus la couche atmosphérique absorbe fortement le rayonnement.
 
+</details>
+
+---
+
 <details>
 <summary>Prérequis importants</summary>
 
@@ -70,6 +74,8 @@ L’objectif est de comprendre comment certains gaz atmosphériques, en particul
 Ce dossier permet donc de faire le lien entre la composition atmosphérique et le bilan énergétique de la Terre.
 
 </details>
+
+---
 
 <details>
 <summary>04_rayonnement_solaire</summary>
