@@ -60,6 +60,7 @@ Pour installer une ancienne version de NumPy compatible avec le code, utiliser l
 
 ```bash
 pip install "numpy<2.0"
+
 </details>
 
 ---
