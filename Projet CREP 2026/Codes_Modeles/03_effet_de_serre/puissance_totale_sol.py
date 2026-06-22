@@ -513,7 +513,7 @@ def cross_section_CO2(wavelength):
 # Conditions aux limites : surface = corps noir (montant), espace = 0 (descendant).
 # À T fixé, les deux flux sont indépendants : on fait deux passes séparées.
 
-def simulate_radiative_transfer(gas_fractions=None,gases=None, z_max = 80000, delta_z = 16000, lambda_min = 0.1e-6, lambda_max = 100e-6, delta_lambda = 0.01e-6,n_altitudes_hitran=80):
+def simulate_radiative_transfer(gas_fractions=None,gases=None, z_max = 80000, delta_z = 8000, lambda_min = 0.1e-6, lambda_max = 100e-6, delta_lambda = 0.01e-6,n_altitudes_hitran=80):
     
   
     
@@ -641,7 +641,7 @@ CO2_fraction = 280e-6      # Concentration de référence en CO2 (280 ppm = ère
 puissance_recu_soleil = 1361 / 4 # Flux solaire moyen absorbé par unité de surface sur la sphère terrestre (W/m²)
 
 # Échantillonnage (on s'assure que 1.0 est bien dans la liste pour avoir les 280 ppm)
-factors_bruts= np.arange(1, 2.1, 0.5) # permet de mettre n'importe quel pas et ou de valeurs min et max même si il n'y a pas la valeur de ref 280ppm
+factors_bruts= np.arange(0.4, 3.1, 0.2) # permet de mettre n'importe quel pas et ou de valeurs min et max même si il n'y a pas la valeur de ref 280ppm
 factors = np.unique(np.append(factors_bruts, 1.0)) #range dans l'ordre croissant et on s'assure que la valeur 1 existe pour avoir notre valeur ref 280ppm
 flux_sol_selon_frCO2 = []      # Liste pour accumuler le contre-rayonnement infrarouge reçu au sol  
 
@@ -687,7 +687,7 @@ forward = lambda x: x - flux_ref_280
 inverse = lambda x: x + flux_ref_280
 
 secax = ax1.secondary_yaxis('right', functions=(forward, inverse))
-secax.set_ylabel("Différence de flux par rapport à 280 ppm (W/m²)")
+secax.set_ylabel("Différence de flux par rapport à 280 ppm (W/m²)",color='tab:blue')
 secax.tick_params(axis='y')
 
 # Ajout d'une ligne horizontale en pointillés pour bien visualiser le "0" de la différence (valeur du flux conrrespondant à 280ppm)

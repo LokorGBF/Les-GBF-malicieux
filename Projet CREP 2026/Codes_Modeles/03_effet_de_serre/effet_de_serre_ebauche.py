@@ -513,7 +513,7 @@ def cross_section_CO2(wavelength):
 # Conditions aux limites : surface = corps noir (montant), espace = 0 (descendant).
 # À T fixé, les deux flux sont indépendants : on fait deux passes séparées.
 
-def simulate_radiative_transfer(gas_fractions=None,gases=None, z_max = 80000, delta_z = 16000, lambda_min = 0.1e-6, lambda_max = 100e-6, delta_lambda = 0.01e-6,n_altitudes_hitran=80):
+def simulate_radiative_transfer(gas_fractions=None,gases=None, z_max = 80000, delta_z = 8000, lambda_min = 0.1e-6, lambda_max = 100e-6, delta_lambda = 0.01e-6,n_altitudes_hitran=80):
     
   
     
@@ -592,7 +592,7 @@ def simulate_radiative_transfer(gas_fractions=None,gases=None, z_max = 80000, de
 
 # Configuration des paramètres de concentration
 CO2_fraction = 280e-6            # Concentration préindustrielle de référence (280 ppm)
-factors_bruts= np.arange(1, 2.1, 0.5) # permet de mettre n'importe quel pas et ou de valeurs min et max même si il n'y a pas la valeur de ref 280ppm
+factors_bruts= np.arange(1, 2.1, 1) # permet de mettre n'importe quel pas et ou de valeurs min et max même si il n'y a pas la valeur de ref 280ppm
 factors = np.unique(np.append(factors_bruts, 1.0)) #range dans l'ordre croissant et on s'assure que la valeur 1 existe pour avoir notre valeur ref 280ppm
 flux_TOA_selon_frCO2 = []        # Liste pour stocker le flux infrarouge s'échappant vers l'espace
 
@@ -623,7 +623,7 @@ flux_ref_280 = flux_TOA_selon_frCO2[idx_280] # on récupere spécifiquement la v
 fig, ax1 = plt.subplots(figsize=(10, 6))
 
 # Tracé sur l'axe principal (Axe de gauche : Valeur absolue)
-ax1.plot(factors * CO2_fraction * 1e6, flux_TOA_selon_frCO2, 'o', color='tab:red', label='Flux total au sommet')
+ax1.plot(factors * CO2_fraction * 1e6, flux_TOA_selon_frCO2, '-o', color='yellow', label='Flux total au sommet')
 ax1.set_xlabel("CO₂ (ppm)")
 ax1.set_ylabel("Flux total au sommet de l'atmosphère (W/m²)")
 ax1.tick_params(axis='y')
