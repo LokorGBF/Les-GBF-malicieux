@@ -58,8 +58,8 @@ Avant d’exécuter le script `calcul_epaisseur_optique_final.py`, il faut respe
 
 Pour installer une ancienne version de NumPy compatible avec le code, utiliser la commande suivante :
 
-```bash
-pip install "numpy<2.0"
+"```bash"
+"pip install numpy<2.0"
 
 </details>
 
