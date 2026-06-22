@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from hapi import *
 
 from atmosphere_isotherme import gas_info_at_altitude
-
+###### pour une éxécution rapide : modification de la ligne 575 --> augmenter le delta_z par exemple 16000 pour avoir moins de couches
 # ----------------------------------------------------------------------------------------------------------------------
 
 # ===================
