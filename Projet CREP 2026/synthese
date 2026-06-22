@@ -74,4 +74,76 @@
 \subsection{absorbance et emissivité}
 \subsection{}
 
+Latex equa diff pression atmosphère Léo
+\documentclass[a4paper,12pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[french]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+\begin{document}
+
+\title{Modélisation de la pression atmosphérique}
+\author{}
+\date{}
+\maketitle
+
+\section*{1. Démarche théorique}
+
+On part de l’équilibre hydrostatique :
+\[
+\vec{\nabla} P = \rho \vec g
+\]
+
+Avec $\vec g = -g(z)\,\vec e_z$, la projection sur l’axe vertical donne :
+\[
+\frac{dP}{dz} = -\rho g(z).
+\]
+
+En utilisant l’équation des gaz parfaits :
+\[
+\rho = \frac{M_{\text{air}}}{R T(z)} P,
+\]
+
+on obtient l’équation différentielle vérifiée par la pression :
+\[
+\frac{dP}{dz} = -\frac{M_{\text{air}} g(z)}{R T(z)} P.
+\]
+
+\section*{2. Modèles étudiés}
+
+Deux modèles sont comparés :
+
+\begin{itemize}
+    \item \textbf{Modèle ISA :} température $T(z)$ variable et 
+    pesanteur variable
+    \[
+    g(z)=\frac{GM_T}{(R_T+z)^2}.
+    \]
+    \item \textbf{Modèle isotherme :} $T=T_0=288\,\text{K}$ et 
+    $g=g_0=9{,}81\,\text{m·s}^{-2}$.
+\end{itemize}
+
+Dans le modèle isotherme, on obtient :
+\[
+P(z)=P_0 \exp\!\left(-\frac{M_{\text{air}} g_0}{R T_0} z\right).
+\]
+
+\section*{3. Résultats}
+
+Les simulations montrent que :
+
+\begin{itemize}
+    \item La pression décroît exponentiellement avec l’altitude.
+    \item En échelle logarithmique, le modèle isotherme apparaît comme une droite.
+    \item Le modèle ISA s’écarte légèrement de cette droite en raison des variations 
+    de température et de pesanteur.
+    \item L’écart entre les deux modèles devient plus visible aux grandes altitudes.
+\end{itemize}
+
+Le modèle isotherme constitue donc une bonne approximation aux faibles altitudes.
+
+\end{document}
+
 \end{document}

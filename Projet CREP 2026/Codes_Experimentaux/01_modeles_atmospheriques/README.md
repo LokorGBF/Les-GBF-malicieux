@@ -18,13 +18,15 @@ Récapitulatif du dossier 01\_modeles\_atmospheriques
 
 
 
-\-
+\-Permet de donner la température et la pression de l'atmosphère en fonction de l'altitude à partir des modèles d'atmosphère ISA et isotherme
 
-&#x20;
+\-Dessine les graphes représentant la pression et la température en fonction de l'altitude (modèles ISA et isotherme)
+
+
 
 \## Dossier \_\_pycache\_\_ avec programme atmosphere\_isotherme.cpython-314
 
 
 
-\-Permet de donner la fraction molaire, la pression partielle et la concentration d'un gaz en fonction de l'altitude à partir d'un modèle d'atmosphère isotherme.
+\-Permet de donner la fraction molaire, la pression partielle et la concentration d'un gaz en fonction de l'altitude à partir d'un modèle d'atmosphère isotherme
 
