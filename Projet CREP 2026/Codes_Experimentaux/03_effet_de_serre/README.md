@@ -22,7 +22,7 @@ Récapitulatif du dossier 03\_effet\_de\_serre
 
 
 
-\## Dossier puissance\_totale\_sol
+\## Programme puissance\_totale\_sol
 
 
 
