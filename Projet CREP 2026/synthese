@@ -1,3 +1,4 @@
+
 \documentclass[12pt]{article}
 
 % --- Packages nécessaires ---
@@ -9,11 +10,9 @@
 \geometry{hmargin=2.5cm,vmargin=2.5cm}
 
 \begin{document}
-
 % --- Début de la page de garde ---
 \begin{titlepage}
     \centering % Tout centrer par défaut
-    
     % 1. Logo
     \begin{figure}
         \centering
@@ -25,15 +24,13 @@
     {\scshape\Large CapECL} \\[1.5cm]
     
     {\large Les GBF malicieux \\ Juin 2026 \\ RAPPORT} \\[2cm]
-    
     % 3. Titre principal (en gras et très gros)
     \rule{\linewidth}{0.5mm} \\[0.4cm]
     {\Huge \bfseries Synthèse} \\[0.4cm]
     \rule{\linewidth}{0.5mm} \\[2cm]
-    
     % 4. Bas de page : Etudiants et Enseignants
-    \begin{minipage}{0.5\textwidth}
-        \begin{flushleft} \large
+    \begin{minipage}{0.49\textwidth}
+    \begin{flushleft} \large
             \emph{Contributeurs :}\\
             Djannah \textsc{CHANFOUR} \\
             Khalil \textsc{ROUIBAH} \\
@@ -41,18 +38,23 @@
             Cyprien \textsc{LAVIER} \\
             Marko \textsc{SELIC} \\
             Naïm \textsc{BEN NEJMA} \\
+            Simon \textsc{CLERC} \\
+            Léo \textsc{YOUSSEFI} \\
         \end{flushleft}
     \end{minipage}
-    ~
-    \begin{minipage}{0.4\textwidth}
-        \begin{flushright} \large
-            \emph{Enseignants :} \\
-            G. \textsc{Chevereau} \\
-            B. \textsc{Bernard} 
-            
-        \end{flushright}
-    \end{minipage}
-
+    \begin{minipage}{0.49\textwidth}
+    \begin{flushright} \large
+        Fanny \textsc{PERRICA} \\
+        Thomas \textsc{BERTRAND} \\
+        Nolane \textsc{LAVENU} \\
+        Elise \textsc{ARACIL} 
+    \end{flushright}
+    \begin{flushright} \large
+        \emph{Enseignants :} \\
+        G. \textsc{Chevereau} \\
+        B. \textsc{Bernard} 
+    \end{flushright}
+\end{minipage}
     \vfill % Pousse le reste vers le bas
 
 \end{titlepage}
@@ -62,7 +64,14 @@
 \tableofcontents % Sommaire automatique
 \newpage
 
-\section{Introduction}
-texte...
+\section{Présentation}
+
+\subsection{objectifs}
+\subsection{hypothèses}
+\section{Maintenance}
+\section{Bilan de puissance}
+\subsection{epaisseur optique}
+\subsection{absorbance et emissivité}
+\subsection{}
 
 \end{document}
