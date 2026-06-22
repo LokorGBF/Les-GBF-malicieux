@@ -157,7 +157,7 @@ def simulate_radiative_transfer(CO2_fraction, z_max = 80000, delta_z = 10, lambd
 
     # Boundary condition : surface flux (corps noir, epsilon = 1) for all wavelengths
     earth_flux = np.pi * planck_function(lambda_range, temperature(0)) * delta_lambda
-    print(f"Total earth surface flux in wavelength range: {earth_flux.sum():.2f} W/m^2")
+  
 
     # -------- PASSE MONTANTE : surface -> sommet --------
     flux_in = earth_flux
@@ -176,7 +176,7 @@ def simulate_radiative_transfer(CO2_fraction, z_max = 80000, delta_z = 10, lambd
 
         flux_in = upward_flux[i, :]
 
-    print(f"Total outgoing flux at the top of the atmosphere: {upward_flux[-1, :].sum():.2f} W/m^2")
+
 
     # -------- PASSE DESCENDANTE : sommet -> surface --------
     # Pas de rayonnement IR entrant depuis l'espace
@@ -192,7 +192,6 @@ def simulate_radiative_transfer(CO2_fraction, z_max = 80000, delta_z = 10, lambd
 
         flux_in = downward_flux[i, :]
 
-    print(f"Total downwelling flux at the surface (contre-rayonnement): {downward_flux[0, :].sum():.2f} W/m^2")
 
     return lambda_range, z_range, upward_flux, downward_flux, optical_thickness
 

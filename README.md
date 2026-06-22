@@ -1,7 +1,7 @@
 # ⚡ ***Les-GBF-malicieux***
 ## **Projet CREP 2026 : Réalisation d'un modèle de prévision climatique mondiale**
 
-### Présentation du projet
+## Présentation du projet
 
 Notre objectif est de modéliser le climat terrestre mondial au fur et à mesure du temps, en réutilisant et améliorant les modèles des années passées, notamment en y ajoutant la modélisation de la composition atmosphérique en différentes couches.
 
