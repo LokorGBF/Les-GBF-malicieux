@@ -2,9 +2,9 @@
 
 Récapitulatif du dossier `01_modeles_atmospheriques`
 
-## Programme __atmosphere_isotherme.py__
+## Programme __atmosphere_isotherme__
 
-- Script interactif permettant de calculer et d'afficher les **propriétés physiques d'un gaz spécifique** (fraction molaire, pressions, concentrations, densité) à une **altitude donnée**, en se basant sur un modèle d'atmosphère **isotherme** multicouche.
+- Permet de calculer la **fraction molaire**, la **pression partielle** et la **concentration** d'un gaz en fonction de l'altitude, à partir d'un modèle d'atmosphère isotherme.
 
 ## Programme __code_atmosphere_T_et_P__
 
