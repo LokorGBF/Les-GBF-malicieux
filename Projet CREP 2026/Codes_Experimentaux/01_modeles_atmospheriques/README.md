@@ -1,24 +1,12 @@
-\# Fichier README du modèle atmosphèrique
+# Fichier README du modèle atmosphérique
 
+Récapitulatif du dossier `01_modeles_atmospheriques`
 
+## Programme __code_atmosphere_T_et_P__
 
-Récapitulatif du dossier 01\_modeles\_atmospheriques
+- Permet de calculer la **température** et la **pression** de l'atmosphère en fonction de l'altitude, en se basant sur le modèle d'atmosphère standard **ISA**.
 
+## Programme __equation_pression_atmospherique__
 
-
-\## Programme code\_atmosphere\_T\_et\_P
-
-
-
-\-Permet de donner la température et la pression de l'atmosphère en fonction de l'altitude à partir du modèle d'atmosphère ISA
-
-
-
-\## Programme equation\_pression\_atmospherique
-
-
-
-\-Permet de donner la température et la pression de l'atmosphère en fonction de l'altitude à partir des modèles d'atmosphère ISA et isotherme
-
-\-Dessine les graphes représentant la pression et la température en fonction de l'altitude (modèles ISA et isotherme)
-
+- Permet de calculer la **température** et la **pression** de l'atmosphère en fonction de l'altitude en comparant deux modèles : le modèle **ISA** et le modèle **isotherme**.
+- **Génère les graphiques** représentant l'évolution de la pression et de la température en fonction de l'altitude pour ces deux modèles.
