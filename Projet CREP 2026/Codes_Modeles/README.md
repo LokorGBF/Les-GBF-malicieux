@@ -1,8 +1,8 @@
-\# Fichier README des codes expérimentaux
+\# Fichier README des codes des modèles
 
 
 
-Récapitulatif du dossier Codes\_Experimentaux
+Récapitulatif du dossier Codes\_Modeles
 
 
 

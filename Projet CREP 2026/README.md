@@ -12,22 +12,22 @@ Modéliser l'évolution du climat terrestre au fil du temps, en repartant des ba
 
 ## Contenu du dépôt
 
-### `Codes_Experimentaux/`
+### `Codes_Maintenance/`
+Code de simulation finalisé, structuré pour la production de résultats.
+
+- `src/` — modules Python du modèle principal
+- `results/figures/` — sorties graphiques de la simulation
+- `ressources/` — données et références propres au modèle principa
+- `main.py` — point d'entrée de la simulation
+- `bilan_puissance_spectral.py` — calcul du bilan de puissance spectrale
+
+### `Codes_Modeles/`
 Scripts d'exploration et de développement, organisés par thème physique.
 
 - `01_modeles_atmospheriques/` — premiers modèles de structure verticale de l'atmosphère
 - `02_epaisseur_optique/` — calcul de l'épaisseur optique des couches atmosphériques
 - `03_effet_de_serre/` — modélisation de l'absorption infrarouge par les GES
 - `04_rayonnement_solaire/` — traitement du rayonnement solaire incident
-
-### `Codes_Principaux/`
-Code de simulation finalisé, structuré pour la production de résultats.
-
-- `src/` — modules Python du modèle principal
-- `results/figures/` — sorties graphiques de la simulation
-- `ressources/` — données et références propres au modèle principal
-- `main.py` — point d'entrée de la simulation
-- `bilan_puissance_spectral.py` — calcul du bilan de puissance spectrale
 
 ### `ressources/`
 Données et documentation communes à l'ensemble du projet.
