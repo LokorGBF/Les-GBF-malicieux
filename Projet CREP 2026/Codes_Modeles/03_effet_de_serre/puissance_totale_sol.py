@@ -168,7 +168,7 @@ def epaisseur_optique(gas, z_min, z_max, N_z=500, plot=False, verbose=False):
     NU_MIN, NU_MAX = SPECTRAL_BANDS[gas]
 
     # ---- Profil sur [z_min, z_max] (même intégration ISA que la simu) ----
-    Z_atm, T_atm, P_atm_profile = build_ISA_profile()
+    Z_atm, T_atm, P_atm_profile = T_P.AtmTetP()
 
     Z_grid = np.linspace(z_min, z_max, N_z)
     delta_z = z_max - z_min

@@ -168,7 +168,7 @@ def epaisseur_optique(gas, z_min, z_max, N_z=500, plot=False, verbose=False):
     NU_MIN, NU_MAX = SPECTRAL_BANDS[gas]
 
     # ---- Profil sur [z_min, z_max] (même intégration ISA que la simu) ----
-    Z_atm, T_atm, P_atm_profile = build_ISA_profile()
+    Z_atm, T_atm, P_atm_profile = T_P.AtmTetP()
 
     Z_grid = np.linspace(z_min, z_max, N_z)
     delta_z = z_max - z_min
@@ -513,7 +513,7 @@ def cross_section_CO2(wavelength):
 # Conditions aux limites : surface = corps noir (montant), espace = 0 (descendant).
 # À T fixé, les deux flux sont indépendants : on fait deux passes séparées.
 
-def simulate_radiative_transfer(gas_fractions=None,gases=None, z_max = 80000, delta_z = 8000, lambda_min = 0.1e-6, lambda_max = 100e-6, delta_lambda = 0.01e-6,n_altitudes_hitran=80):
+def simulate_radiative_transfer(gas_fractions=None,gases=None, z_max = 80000, delta_z = 16000, lambda_min = 0.1e-6, lambda_max = 100e-6, delta_lambda = 0.01e-6,n_altitudes_hitran=80):
     
   
     
@@ -623,7 +623,7 @@ flux_ref_280 = flux_TOA_selon_frCO2[idx_280] # on récupere spécifiquement la v
 fig, ax1 = plt.subplots(figsize=(10, 6))
 
 # Tracé sur l'axe principal (Axe de gauche : Valeur absolue)
-ax1.plot(factors * CO2_fraction * 1e6, flux_TOA_selon_frCO2, '-o', color='yellow', label='Flux total au sommet')
+ax1.plot(factors * CO2_fraction * 1e6, flux_TOA_selon_frCO2, 'o', color='tab:red', label='Flux total au sommet')
 ax1.set_xlabel("CO₂ (ppm)")
 ax1.set_ylabel("Flux total au sommet de l'atmosphère (W/m²)")
 ax1.tick_params(axis='y')
@@ -636,8 +636,8 @@ forward = lambda x: x - flux_ref_280
 inverse = lambda x: x + flux_ref_280
 
 secax = ax1.secondary_yaxis('right', functions=(forward, inverse))
-secax.set_ylabel("Différence de flux par rapport à 280 ppm (W/m²)")
-secax.tick_params(axis='y')
+secax.set_ylabel("Différence de flux par rapport à 280 ppm (W/m²)",color='tab:blue')
+secax.tick_params(axis='y',color='tab:blue')
 
 # Ajout d'une ligne horizontale en pointillés pour bien visualiser le "0" de la différence (valeur du flux conrrespondant à 280ppm)
 ax1.axhline(flux_ref_280, color='gray', linestyle='--', alpha=0.7)
