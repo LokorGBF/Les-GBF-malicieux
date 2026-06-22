@@ -36,7 +36,7 @@ Ces paramètres permettent de comparer les gaz dans des conditions identiques.
   <summary><code>- `spectraplot_H2O.png` : spectre d’absorption de la **vapeur d’eau**</code>.</summary>
     - La vapeur d’eau absorbe fortement dans certaines zones de l’infrarouge, notamment aux faibles fréquences du graphique.
     - C’est un gaz très important dans l’effet de serre, car son absorption est large et intense.
-    Ce fichier est disponible [ici](https://github.com/LokorGBF/Les-GBF-malicieux/blob/401aa1d7a404c0ec50800dcd98b6d59926db25b7/Projet%20CREP%202026/ressources/SpectresHitran/spectraplot_H2O.png)
+    Ce fichier est disponible [ici](./https://github.com/LokorGBF/Les-GBF-malicieux/blob/401aa1d7a404c0ec50800dcd98b6d59926db25b7/Projet%20CREP%202026/ressources/SpectresHitran/spectraplot_H2O.png)
   </details>
 
   <details>
