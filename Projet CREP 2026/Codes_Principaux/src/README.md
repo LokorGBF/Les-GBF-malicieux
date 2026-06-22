@@ -1,9 +1,6 @@
 # Fichier README du dossier `src`
 
-Récapitulatif du dossier `src`
-
 Ce dossier contient l'ensemble des **fichiers sources principaux** utilisés pour faire fonctionner le modèle climatique.  
-Chaque fichier correspond à une partie précise du modèle : données, grille terrestre, flux solaire, albédo, effet de serre, bilan d’énergie, évolution de la température ou affichage des résultats.
 
 ## Fichiers du dossier `src`
 
@@ -43,4 +40,4 @@ Chaque fichier correspond à une partie précise du modèle : données, grille t
 
 ## Dossier `__pycache__`
 
-- `__pycache__` : dossier généré automatiquement par Python lors de l’exécution du code ; il ne fait pas partie du code source principal et peut être ignoré dans le suivi du projet
+- `__pycache__` : dossier généré automatiquement par Python lors de l’exécution du code, il ne fait pas partie du code source principal.
