@@ -176,7 +176,7 @@ def simulate_radiative_transfer(CO2_fraction, z_max = 80000, delta_z = 10, lambd
 
         flux_in = upward_flux[i, :]
 
-
+    
 
     # -------- PASSE DESCENDANTE : sommet -> surface --------
     # Pas de rayonnement IR entrant depuis l'espace
@@ -192,42 +192,49 @@ def simulate_radiative_transfer(CO2_fraction, z_max = 80000, delta_z = 10, lambd
 
         flux_in = downward_flux[i, :]
 
+ 
 
     return lambda_range, z_range, upward_flux, downward_flux, optical_thickness
 
 # ----------------------------------------------------------------------------------------------------------------------
 
 # ======================================================================================================================
-# MAIN : ÉVOLUTION DU FLUX SORTANT AU SOMMET DE L'ATMOSPHÈRE (TOA) EN FONCTION DU CO2
+# MAIN : ÉVOLUTION DU FLUX REÇU AU SOL EN FONCTION DE LA CONCENTRATION EN CO2
 # ======================================================================================================================
 
-# Configuration des paramètres de concentration
-CO2_fraction = 280e-6            # Concentration préindustrielle de référence (280 ppm)
-factors = np.arange(0.5, 2, 0.5) # Facteurs multiplicateurs (de 10% à 190% de la valeur de référence)
-flux_TOA_selon_frCO2 = []        # Liste pour stocker le flux infrarouge s'échappant vers l'espace
+#  Configuration des paramètres physiques de base
+CO2_fraction = 280e-6            # Concentration de référence en CO2 (280 ppm = ère préindustrielle)
+puissance_recu_soleil = 1361 / 4 # Flux solaire moyen absorbé par unité de surface sur la sphère terrestre (W/m²)
 
-# Boucle de simulation du transfert radiatif
+# Définition des scénarios climatiques (facteurs multiplicateurs de la concentration de base)
+factors = np.arange(0.5, 2, 0.5)
+flux_sol_selon_frCO2 = []        # Liste pour accumuler le contre-rayonnement infrarouge reçu au sol
+
+#  Boucle de simulation du transfert radiatif
 for factor in factors:
-    # Calcul de la concentration en CO2 pour l'étape actuelle
+    # Calcul de la concentration actuelle pour cette itération
     current_CO2 = CO2_fraction * factor
     
-    # Calcul des flux avec le modèle à deux flux
+    # Exécution du modèle (calcul des flux montants et descendants dans l'atmosphère)
     lambda_range, z_range, upward_flux, downward_flux, optical_thickness = simulate_radiative_transfer(current_CO2)
-    delta_lambda = lambda_range[1] - lambda_range[0] # Utile si la résolution spectrale varie
+    delta_lambda = lambda_range[1] - lambda_range[0] # Conservé si modification future de la grille spectrale
     
-    # Extraction du flux MONTANT au SOMMET de l'atmosphère (indice -1 pour la couche la plus haute, z_max)
-    # On intègre (somme) l'énergie sur tout le spectre des longueurs d'onde
-    flux_TOA_selon_frCO2.append(upward_flux[-1, :].sum())  
+    # Extraction du flux infrarouge descendant qui atteint le SOL (altitude z = 0, d'où l'indice 0)
+    # On somme l'énergie sur l'ensemble du spectre des longueurs d'onde
+    flux_sol_selon_frCO2.append(downward_flux[0, :].sum())  
 
-# Conversion en tableau NumPy pour faciliter les manipulations graphiques
-flux_TOA_selon_frCO2 = np.array(flux_TOA_selon_frCO2)
+# Conversion en tableau NumPy pour permettre les opérations mathématiques directes
+flux_sol_selon_frCO2 = np.array(flux_sol_selon_frCO2)
 
-# Construction et affichage du graphique
-# Conversion de la fraction de CO2 sur l'axe X en parties par million (ppm) via le multiplicateur 1e6
-plt.plot(factors * CO2_fraction * 1e6, flux_TOA_selon_frCO2)
+#  Calcul du bilan total reçu au sol et construction du graphique
+# Flux total = Contre-rayonnement infrarouge de l'atmosphère + Rayonnement visible du Soleil
+flux_total_sol = flux_sol_selon_frCO2 + puissance_recu_soleil
+
+# Tracé de la courbe finale (Conversion de la fraction de CO2 en ppm sur l'axe X)
+plt.plot(factors * CO2_fraction * 1e6, flux_total_sol)
 plt.xlabel("CO₂ (ppm)")
-plt.ylabel("Flux TOA (W/m²)")
-plt.title("Impact du CO₂ sur le flux sortant au sommet de l'atmosphère")
+plt.ylabel("Flux reçu par le sol (W/m²)")
+plt.title("Impact de la concentration en CO₂ sur le flux total absorbé au sol")
 plt.grid(True)
 
 # Affichage de la fenêtre graphique
