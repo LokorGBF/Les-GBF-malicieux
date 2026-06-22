@@ -1,6 +1,6 @@
 # Fichier README des codes
 
-Récapitulatif du dossier `Codes`
+Récapitulatif du dossier `03_effet_de_serre`
 
 ## Programme __atmosphere_isotherme.py__
 
