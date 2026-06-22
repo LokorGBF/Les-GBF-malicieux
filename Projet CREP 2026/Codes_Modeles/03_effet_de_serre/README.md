@@ -20,7 +20,7 @@ Récapitulatif du dossier `Codes`
 
 ## Programme __installation_hapi.py__
 
-- Permet de charger la base de données spectrale **HITRAN** (nécessaire avant de lancer les calculs d'épaisseur optique).
+- Permet de charger la base de données spectrale **HITRAN** 
 
 ## Programme __puissance_totale_sol.py__
 
