@@ -1,64 +1,84 @@
-# ⚡ ***Les-GBF-malicieux***
-## **Projet CREPES 2026 : Réalisation d'un modèle de prévision climatique mondiale**
+# Projet CREP 2026 — Modélisation climatique mondiale
 
-### Présentation du projet
-
-Notre objectif est de modéliser le climat terrestre mondial au fur et à mesure du temps, en réutilisant et améliorant les modèles des années passées, notamment en y ajoutant la modélisation de la composition atmosphérique en différentes couches.
+> Projet mené dans le cadre de **CREP**
 
 ---
 
-## Objectifs de modélisation
+## Objectif
 
-Notre travail s'est divisé en plusieurs phases clés :
-
-* **Phase 1 : Maintenance et tri des données des années passées**
-  * [...]
-* **Phase 2 : L'impact atmosphérique**
-  * Découpe de l'atmosphère en différentes couches.
-  * Modélisation de l'influence de la concentration en CO₂ sur la puissance surfacique reçue.
-  * Élargissement à l'influence des autres gaz atmosphériques.
-* **Phase 3 : Création d'un modèle qui nous donne des valeurs en fonction des données initiales et du temps**
-  * Comparaison des prédictions de notre modèle avec les mesures expérimentales.
+Modéliser l'évolution du climat terrestre au fil du temps, en repartant des bases posées par les groupes des années précédentes. L'apport principal de cette édition est la **modélisation du transfert radiatif atmosphérique** : découpe de l'atmosphère en couches, influence des gaz à effet de serre (CO₂ et autres) sur le bilan énergétique de surface.
 
 ---
 
-## Structure du projet
+## Contenu du dépôt
 
-```bash
-Les-GBF-malicieux/
-├── Codes/                 # Tous nos scripts Python et le code source de la simulation
-├── Donnees/               # Fichiers de données lourds (isolés dans un dossier séparé)
-├── Ressources/            # Documentation, sources, schémas et le reste des données
-├── .gitignore             # Liste des fichiers/dossiers ignorés par Git (ex: .venv, .vscode)
-├── synthese.pdf           # Notre document de synthèse final
-└── README.md              # Ce fichier
+### `Codes_Experimentaux/`
+Scripts d'exploration et de développement, organisés par thème physique.
+
+- `01_modeles_atmospheriques/` — premiers modèles de structure verticale de l'atmosphère
+- `02_epaisseur_optique/` — calcul de l'épaisseur optique des couches atmosphériques
+- `03_effet_de_serre/` — modélisation de l'absorption infrarouge par les GES
+- `04_rayonnement_solaire/` — traitement du rayonnement solaire incident
+
+### `Codes_Principaux/`
+Code de simulation finalisé, structuré pour la production de résultats.
+
+- `src/` — modules Python du modèle principal
+- `results/figures/` — sorties graphiques de la simulation
+- `ressources/` — données et références propres au modèle principal
+- `main.py` — point d'entrée de la simulation
+- `bilan_puissance_spectral.py` — calcul du bilan de puissance spectrale
+
+### `ressources/`
+Données et documentation communes à l'ensemble du projet.
+
+- `SpectresHitran/` — spectres d'absorption issus de la base de données HITRAN
+- `donnée/` — données climatiques de référence (réanalyses, mesures)
+
+### `synthese.pdf`
+Code source LaTeX du document de synthèse final.
+
+---
+
+## Installation
+
+### Prérequis
+
+Python 3.10+ et les bibliothèques suivantes :
+
+```
+numpy
+matplotlib
+scipy
+tqdm
+pandas
+xarray
+netCDF4
+geopandas
+shapely
 ```
 
----
+### Mise en place
 
-## Installation et Utilisation
+```bash
+# Cloner le dépôt
+git clone https://github.com/LokorGBF/Les-GBF-malicieux.git
+cd "Les-GBF-malicieux/Projet CREP 2026"
 
-### 1. Prérequis
+# Créer un environnement virtuel (recommandé)
+python -m venv .venv
+source .venv/bin/activate        # Linux / macOS
+.venv\Scripts\activate           # Windows
 
-Assurez-vous d'avoir installé Python 3 et les bibliothèques suivantes :
-* `numpy`
-* `path`
-* `matplotlib`
-* `scipy`
-* `tqdm`
-* `pandas`
-* `xarray`
-* `netCDF4`
-* `geopandas`
-* `shapely`
+# Installer les dépendances
+pip install numpy matplotlib scipy tqdm pandas xarray netCDF4 geopandas shapely
+```
 
-### 2. Utiliser un environnement virtuel (Recommandé)
+> **Note :** `geopandas` et `netCDF4` peuvent nécessiter des dépendances système (GDAL, HDF5). En cas de problème, consulter leurs documentations officielles ou utiliser `conda`.
 
-Si l'installation des bibliothèques rencontre des problèmes (comme des conflits de versions avec d'autres projets sur votre machine), il est fortement conseillé de créer un **environnement virtuel**. Cela permet d'isoler le projet.
+### Lancer la simulation
 
-
-1. **Lancer le fichier principale :**
-
-   ```bash
-   python [Nom_du_script_principal_si_y'en_a_un_jsp_peut_etre_pas_on_verra.py]
-
+```bash
+cd Codes_Principaux
+python main.py
+```
