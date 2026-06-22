@@ -21,7 +21,7 @@ Récapitulatif du dossier `ressources`
 
 ## Dossier _npy_
 
-- contient les 4 fichiers pour les planishères et les sphèes, en low res et high res, avec 1 ou 2 ans de simulation
+- contient les 4 fichiers pour les planisphères et les sphères, en low res et high res, avec 1 ou 2 ans de simulation
 
 ## Fichiers
 
