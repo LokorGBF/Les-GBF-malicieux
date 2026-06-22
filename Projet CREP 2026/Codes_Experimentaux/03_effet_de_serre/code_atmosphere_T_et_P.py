@@ -2,17 +2,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 def AtmTetP() :
 
-    # Constantes physiques
-    G = 6.67e-11          # Constante gravitationnelle (m^3.kg^-1.s^-2)
-    Mair = 29e-3          # Masse molaire de l'air (kg/mol)
-    R = 8.314             # Constante des gaz parfaits (J/(K.mol))
-    Mterre = 5.97e24      # Masse de la Terre (kg)
-    RT = 6378e3           # Rayon de la Terre (m)
-    g0 = 9.81             # Pesanteur constante du modèle isotherme (m/s^2)
+    G= 6.67e-11         # m/s²
+    Mair = 29e-3      # kg/mol
+    R = 8.314         # J/(K.mol)
+    Mterre = 5.97e24
+    RT= 6378e3
 
-    # Conditions au sol
-    Tsol = 288            # Température au sol (K)
-    Psol = 1.013e5        # Pression au sol (Pa)
+    Tsol = 288        # K
+    Psol = 1.013e5    # Pa
 
 
     # Gradient thermique ISA
@@ -63,7 +60,7 @@ def AtmTetP() :
 
     # Modèle isotherme
     def PisoT(z, T0=288):
-        return Psol * np.exp(-Mair * g0 * z / (R * T0))
+        return Psol * np.exp(-Mair * g * z / (R * T0))
 
 
     return (T,P,Z)

@@ -213,57 +213,7 @@ plt.plot(factors*CO2_fraction*1e6,flux_TOA_selon_frCO2)
 plt.xlabel("CO₂ (ppm)")
 plt.ylabel("Flux TOA (W/m²)")
 plt.grid(True)
-# lambda_range, z_range, upward_flux2, downward_flux2, optical_thickness2 = simulate_radiative_transfer(CO2_fraction)
 
-# delta_lambda = lambda_range[1] - lambda_range[0]
-
-
-
-
-
-
-
-
-
-
-
-
-# # === Spectre au sommet de l'atmosphère (flux MONTANT) ===
-# plt.figure(figsize=(14, 9))
-# # Corps noir à la température de surface et à 216 K (haute atmosphère)
-# plt.plot(1e6 * lambda_range, np.pi * planck_function(lambda_range, temperature(0)) / 1e6, '--k')
-# plt.plot(1e6 * lambda_range, np.pi * planck_function(lambda_range, 216) / 1e6, '--k')
-
-# plt.plot(1e6 * lambda_range, upward_flux[-1, :]  / delta_lambda / 1e6, '-g', label='280 ppm')
-# plt.plot(1e6 * lambda_range, upward_flux2[-1, :] / delta_lambda / 1e6, '-r', label='560 ppm')# à changer
-# plt.fill_between(1e6 * lambda_range,
-#                  upward_flux[-1, :]  / delta_lambda / 1e6,
-#                  upward_flux2[-1, :] / delta_lambda / 1e6,
-#                  color='yellow', alpha=0.9)
-# plt.xlabel("Longueur d'onde (μm)")
-# plt.ylabel("Luminance spectrale (W/m²/μm/sr)")
-# plt.title("Flux montant au sommet de l'atmosphère")
-# plt.xlim(0, 50)
-# plt.ylim(0, 30)
-# plt.legend()
-# plt.grid(True)
-
-# # === Contre-rayonnement atmosphérique au sol (flux DESCENDANT) - nouveau ===
-# plt.figure(figsize=(14, 9))
-# plt.plot(1e6 * lambda_range, np.pi * planck_function(lambda_range, temperature(0)) / 1e6, '--k')
-# plt.plot(1e6 * lambda_range, downward_flux[0, :]  / delta_lambda / 1e6, '-g', label='280 ppm')
-# plt.plot(1e6 * lambda_range, downward_flux2[0, :] / delta_lambda / 1e6, '-r', label='560 ppm') # POIUR LA L2GENDE à changer
-# plt.fill_between(1e6 * lambda_range,
-#                  downward_flux[0, :]  / delta_lambda / 1e6,
-#                  downward_flux2[0, :] / delta_lambda / 1e6,
-#                  color='yellow', alpha=0.9)
-# plt.xlabel("Longueur d'onde (μm)")
-# plt.ylabel("Luminance spectrale (W/m²/μm/sr)")
-# plt.title("Contre-rayonnement atmosphérique reçu au sol")
-# plt.xlim(0, 50)
-# plt.ylim(0, 30)
-# plt.legend()
-# plt.grid(True)
 
 plt.show()
 # ----------------------------------------------------------------------------------------------------------------------

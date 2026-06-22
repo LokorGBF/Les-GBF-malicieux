@@ -2,7 +2,7 @@
 
 Récapitulatif du dossier `ressources`.
 
-Ce dossier regroupe les fichiers nécessaires aux différents modèles utilisés dans le projet : humidité du sol, albédo, découpage géographique, constantes associées aux continents, données pré-calculées, ainsi que les spectres d’absorption des gaz atmosphériques.
+Ce dossier regroupe les fichiers nécessaires aux différents modèles utilisés dans le projet : humidité du sol ("Cp_humidity"), albédo ("albedo"), découpage géographique, constantes associées aux continents, données pré-calculées, ainsi que les spectres d’absorption des gaz atmosphériques.
 
 ## Dossier _SpectreHitran_
 
