@@ -15,13 +15,13 @@ Ces codes permettent notamment de :
 
 </details>
 
----
 
 Le dossier est organisé en plusieurs sous-dossiers, chacun correspondant à une partie du modèle climatique global.
 
 
+
 <details>
-<summary><strong>Dossier <code>01_modeles_atmospheriques</code></strong></summary>
+<summary> 01_modeles_atmospheriques</summary>
 
 Ce dossier contient les programmes de base permettant de décrire l’atmosphère en fonction de l’altitude.
 
@@ -29,20 +29,12 @@ Il sert principalement à calculer les grandeurs atmosphériques fondamentales c
 
 Ces données sont ensuite réutilisées dans les autres parties du projet, notamment pour le calcul de l’épaisseur optique et l’étude de l’effet de serre.
 
-<details>
-<summary><code>code_atmosphere_T_et_P.py</code></summary>
-
-- Permet de calculer la **température** et la **pression** de l’atmosphère en fonction de l’altitude.
-- Le programme repose sur le modèle d’atmosphère standard **ISA**.
-- Il permet d’obtenir une première description réaliste de l’évolution verticale de l’atmosphère.
-- Ce modèle est utile pour connaître les conditions physiques dans les différentes couches atmosphériques.
-
 </details>
 
 ---
 
 <details>
-<summary><strong>Dossier <code>02_epaisseur_optique</code></strong></summary>
+<summary>02_epaisseur_optique</summary>
 
 Ce dossier contient les codes permettant de calculer l’**épaisseur optique** de l’atmosphère.
 
@@ -51,25 +43,12 @@ Dans ce projet, elle sert à quantifier l’effet des gaz atmosphériques sur le
 
 Plus l’épaisseur optique est élevée, plus la couche atmosphérique absorbe fortement le rayonnement.
 
-<details>
-<summary><strong>Prérequis importants</strong></summary>
-
-Avant d’exécuter le script `calcul_epaisseur_optique_final.py`, il faut respecter les consignes suivantes :
-
-- exécuter au moins une fois le fichier `installation_hapi.py` ;
-- vérifier que le fichier `atmosphere_isotherme.py` est bien dans le même dossier ;
-- utiliser une version compatible de NumPy.
-
-Pour installer une ancienne version de NumPy compatible avec le code, utiliser la commande suivante :
-
-```bash
-pip install "numpy<2.0"
 </details>
 
 ---
 
 <details>
-<summary><strong>Dossier <code>03_effet_de_serre</code></strong></summary>
+<summary>03_effet_de_serre</summary>
 
 Ce dossier regroupe les programmes utilisés pour étudier l’effet de serre.
 
@@ -79,8 +58,10 @@ Ce dossier permet donc de faire le lien entre la composition atmosphérique et l
 
 </details>
 
+---
+
 <details>
-<summary><strong>Dossier <code>04_rayonnement_solaire</code></strong></summary>
+<summary>04_rayonnement_solaire</summary>
 
 Ce dossier contient les programmes liés au rayonnement solaire.
 
