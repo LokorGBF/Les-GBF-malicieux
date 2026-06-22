@@ -22,9 +22,3 @@ Récapitulatif du dossier `ressources`
 ## Dossier _npy_
 
 - contient les 4 fichiers pour les planishères et les sphèes, en low res et high res, avec 1 ou 2 ans de simulation
-
-## Fichiers
-
-### Rapport
-
-- `données sourcées.pdf` : fichier qui regroupe des données utiles pour nos modèles
