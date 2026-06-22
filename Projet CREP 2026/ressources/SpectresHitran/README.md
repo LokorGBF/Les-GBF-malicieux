@@ -1,13 +1,11 @@
 <details>
-<summary> Fichier README des ressources</summary>
-
-Récapitulatif du dossier `ressources`:
+<summary>Récapitulatif du dossier `ressources`:</summary>
 
 Ce dossier regroupe les fichiers nécessaires aux différents modèles utilisés dans le projet : humidité du sol ("Cp_humidity"), albédo ("albedo"), découpage géographique, constantes associées aux continents, données pré-calculées, ainsi que les spectres d’absorption des gaz atmosphériques.
 </details>
 
 <details>
-<summary> Dossier _SpectreHitran_</summary> 
+<summary>Dossier _SpectreHitran_</summary> 
 
 Ce dossier contient les **spectres d’absorption infrarouge** de plusieurs gaz atmosphériques, générés à partir de la base de données **HITRAN** et affichés sous forme de graphiques.
 
@@ -17,7 +15,7 @@ Ces fichiers servent à identifier les zones du rayonnement infrarouge terrestre
 </details>
 
 <details>
-<summary> Paramètres utilisés dans les spectres individuels</summary>
+<summary>Paramètres utilisés dans les spectres individuels</summary>
 
 Pour les spectres individuels :
 
@@ -30,7 +28,7 @@ Ces paramètres permettent de comparer les gaz dans des conditions identiques.
 </details>
 
 <details>
-<summary><strong> Fichiers du dossier</strong></summary>
+<summary><strong>Fichiers du dossier</strong></summary>
 
   <details>
   <summary><code>- `spectraplot_H2O.png` : spectre d’absorption de la **vapeur d’eau**</code>.</summary>
