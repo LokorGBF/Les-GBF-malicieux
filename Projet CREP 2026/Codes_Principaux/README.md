@@ -21,7 +21,7 @@ Récapitulatif du dossier `Codes_Principaux`
 
 ## Dossier _results_
 
-- contient les **résultats générés** par les simulations : figures, cartes, fichiers de température produits lors de l’exécution du modèle.
+- contient les **résultats générés** par la simulation : figure, carte, fichier de température produit lors de l’exécution du modèle.
 
 ## Dossier _figures_
 
