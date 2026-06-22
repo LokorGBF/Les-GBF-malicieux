@@ -7,8 +7,8 @@ from hapi import *
 
 from atmosphere_isotherme import gas_info_at_altitude
 
-###### pour une éxécution rapide : modification de la ligne 515 --> augmenter le delta_z par exemple 16000 pour avoir moins de couches
-#                                  modification de la ligne 643 --> augmenter le pas ou changer les bornes de l'itération
+###### pour une éxécution rapide : modification de la ligne 516 --> augmenter le delta_z par exemple 16000 pour avoir moins de couches
+#                                  modification de la ligne 595 --> augmenter le pas ou changer les bornes de l'itération
 # ----------------------------------------------------------------------------------------------------------------------
 # Récupération des valeurs de température et de pression qui corresponde à notre modèle 
 import code_atmosphere_T_et_P as T_P
@@ -647,15 +647,4 @@ plt.show()
 
 
 
-
-# # Construction et affichage du graphique
-# # Conversion de la fraction de CO2 sur l'axe X en parties par million (ppm) via le multiplicateur 1e6
-# plt.plot(factors * CO2_fraction * 1e6, flux_TOA_selon_frCO2)
-# plt.xlabel("CO₂ (ppm)")
-# plt.ylabel("Flux TOA (W/m²)")
-# plt.title("Impact du CO₂ sur le flux sortant au sommet de l'atmosphère")
-# plt.grid(True)
-
-# # Affichage de la fenêtre graphique
-# plt.show()
 # ----------------------------------------------------------------------------------------------------------------------
