@@ -15,9 +15,9 @@ Ces codes permettent notamment de :
 
 </details>
 
----
 
 Le dossier est organisé en plusieurs sous-dossiers, chacun correspondant à une partie du modèle climatique global.
+
 
 
 <details>
