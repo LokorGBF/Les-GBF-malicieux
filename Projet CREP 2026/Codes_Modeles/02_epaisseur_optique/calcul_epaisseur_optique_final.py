@@ -145,13 +145,13 @@ for i, z in enumerate(Z_grid):
 n_grid = xi_grid * P_grid / (K_B * T_grid)
 
 # Moyennes sur la couche
-P_mean = np.trapz(P_grid, Z_grid) / delta_z
-T_mean = np.trapz(T_grid, Z_grid) / delta_z
-xi_mean = np.trapz(xi_grid, Z_grid) / delta_z
+P_mean = np.trapezoid(P_grid, Z_grid) / delta_z
+T_mean = np.trapezoid(T_grid, Z_grid) / delta_z
+xi_mean = np.trapezoid(xi_grid, Z_grid) / delta_z
 P_mean_atm = P_mean / 101325.0
 
 # Colonne moléculaire
-colonne = np.trapz(n_grid, Z_grid)
+colonne = np.trapezoid(n_grid, Z_grid)
 
 print(f"\n→ Gaz            : {gas}")
 print(f"→ Couche         : {z_min:.0f} → {z_max:.0f} m")
@@ -198,7 +198,7 @@ transmittance = np.where(tau > 700, 0.0, np.exp(-tau))
 c2 = 1.438776877  # cm.K
 poids_planck = nu**3 / np.expm1(c2 * nu / T_mean)
 
-T_bande = np.trapz(poids_planck * transmittance, nu) / np.trapz(poids_planck, nu)
+T_bande = np.trapezoid(poids_planck * transmittance, nu) / np.trapezoid(poids_planck, nu)
 tau_eff = -np.log(T_bande) if T_bande > 0 else np.inf
 
 
